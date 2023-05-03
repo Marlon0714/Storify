@@ -1,6 +1,7 @@
 package co.edu.uniquindio.storify.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Cancion implements Serializable {
     private String codigo;
@@ -69,5 +70,18 @@ public class Cancion implements Serializable {
                 ", genero='" + genero + '\'' +
                 ", urlYoutube='" + urlYoutube + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cancion)) return false;
+        Cancion cancion = (Cancion) o;
+        return getAnio() == cancion.getAnio() && getDuracion() == cancion.getDuracion() && getCodigo().equals(cancion.getCodigo()) && Objects.equals(getNombre(), cancion.getNombre()) && Objects.equals(getAlbum(), cancion.getAlbum()) && Objects.equals(getCaratula(), cancion.getCaratula()) && Objects.equals(getGenero(), cancion.getGenero()) && Objects.equals(getUrlYoutube(), cancion.getUrlYoutube());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCodigo(), getNombre(), getAlbum(), getCaratula(), getAnio(), getDuracion(), getGenero(), getUrlYoutube());
     }
 }
