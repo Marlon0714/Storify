@@ -1,6 +1,7 @@
 package co.edu.uniquindio.storify.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 public class ListaCircular<T extends Serializable> implements Serializable{
 
@@ -117,6 +118,34 @@ public class ListaCircular<T extends Serializable> implements Serializable{
         } while (nodoActual != inicio);
 
         return false;
+    }
+
+    public void ordenar(Comparator<T> comparador) {
+        // Convertir la lista circular en una lista doblemente enlazada
+        if (inicio == null) {
+            return;
+        }
+        fin.setSiguiente(null);
+        inicio.setAnterior(null);
+
+        // Aplicar el algoritmo de ordenación por inserción
+        Nodo<T> actual = inicio.getSiguiente();
+        while (actual != null) {
+            Nodo<T> nodoInsertado = actual;
+            T valorInsertado = nodoInsertado.getValor();
+            Nodo<T> nodoComparado = nodoInsertado.getAnterior();
+            while (nodoComparado != null && comparador.compare(nodoComparado.getValor(), valorInsertado) > 0) {
+                nodoInsertado.setValor(nodoComparado.getValor());
+                nodoInsertado = nodoComparado;
+                nodoComparado = nodoComparado.getAnterior();
+            }
+            nodoInsertado.setValor(valorInsertado);
+            actual = actual.getSiguiente();
+        }
+
+        // Convertir la lista doblemente enlazada en una lista circular
+        fin.setSiguiente(inicio);
+        inicio.setAnterior(fin);
     }
 
     public void insertarEnPosicion(int posicion, T valor) {

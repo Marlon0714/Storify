@@ -1,7 +1,7 @@
 package co.edu.uniquindio.storify.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Usuario implements Serializable {
@@ -58,6 +58,9 @@ public class Usuario implements Serializable {
 
     public void eliminarCancion(Cancion cancion) {
         listaCancionesFavoritas.eliminar(cancion);
+    }
+    public void ordenarCanciones(Comparator<Cancion> comparador) {
+        listaCancionesFavoritas.ordenar(comparador);
     }
 
     @Override

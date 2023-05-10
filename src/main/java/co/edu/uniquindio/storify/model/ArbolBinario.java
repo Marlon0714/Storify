@@ -51,6 +51,14 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
         this.raiz = null;
     }
 
+    public Nodo<T> getRaiz() {
+        return raiz;
+    }
+
+    public void setRaiz(Nodo<T> raiz) {
+        this.raiz = raiz;
+    }
+
     public void insertar(T valor) {
         Nodo<T> nuevoNodo = new Nodo<>(valor, null, null);
         if (raiz == null) {
@@ -119,6 +127,30 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
         return nodoActual;
     }
 
+    public T buscar(T valor) {
+        Nodo<T> nodo = buscar(raiz, valor);
+        if (nodo == null){
+            return null;
+        }else{
+            return  nodo.getValor();
+        }
+    }
+
+    private Nodo<T> buscar(Nodo<T> nodoActual, T valor) {
+        if (nodoActual == null) {
+            return null; // valor no encontrado
+        }
+
+        int comparacion = valor.compareTo(nodoActual.getValor());
+
+        if (comparacion == 0) {
+            return nodoActual; // valor encontrado
+        } else if (comparacion < 0) {
+            return buscar(nodoActual.getIzq(), valor); // buscar en el subárbol izquierdo
+        } else {
+            return buscar(nodoActual.getDer(), valor); // buscar en el subárbol derecho
+        }
+    }
 }
 
 

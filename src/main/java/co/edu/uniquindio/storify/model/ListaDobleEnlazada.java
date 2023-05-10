@@ -1,8 +1,10 @@
 package co.edu.uniquindio.storify.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class ListaDobleEnlazada<T extends Serializable> implements Serializable {
+public class ListaDobleEnlazada<T extends Serializable> implements Serializable, Iterable<T> {
 
     public static class Nodo<T extends Serializable> implements Serializable {
         // Variable en la cual se va a guardar el valor.
@@ -55,6 +57,7 @@ public class ListaDobleEnlazada<T extends Serializable> implements Serializable 
     public ListaDobleEnlazada(){
         this.primero = null;
     }
+
     /**
      * Método para insertar un nodo al final de la lista.
      */
@@ -135,6 +138,35 @@ public class ListaDobleEnlazada<T extends Serializable> implements Serializable 
             } else {
                 throw new IndexOutOfBoundsException("La posición excede el tamaño de la lista");
             }
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ListaIterator();
+    }
+
+    private class ListaIterator implements Iterator<T> {
+
+        private Nodo<T> nodoActual;
+
+        public ListaIterator() {
+            nodoActual = primero;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return nodoActual != null;
+        }
+
+        @Override
+        public T next() {
+            if (hasNext()) {
+                T valor = nodoActual.getValor();
+                nodoActual = nodoActual.getSiguiente();
+                return valor;
+            }
+            throw new NoSuchElementException();
         }
     }
 

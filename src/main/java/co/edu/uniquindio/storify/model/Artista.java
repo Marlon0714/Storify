@@ -3,14 +3,14 @@ package co.edu.uniquindio.storify.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class Autor implements Serializable, Comparable<Autor> {
+public class Artista implements Serializable, Comparable<Artista> {
     private String codigo;
     private String nombre;
     private String nacionalidad;
     private boolean esGrupo;
     private ListaDobleEnlazada<Cancion> listaCanciones;
 
-    public Autor(String codigo, String nombre, String nacionalidad, boolean esGrupo, ListaDobleEnlazada<Cancion> listaCanciones) {
+    public Artista(String codigo, String nombre, String nacionalidad, boolean esGrupo, ListaDobleEnlazada<Cancion> listaCanciones) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.nacionalidad = nacionalidad;
@@ -18,7 +18,31 @@ public class Autor implements Serializable, Comparable<Autor> {
         this.listaCanciones = listaCanciones;
     }
 
-    public Autor() {
+    public Artista() {
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setNacionalidad(String nacionalidad) {
+        this.nacionalidad = nacionalidad;
+    }
+
+    public boolean isEsGrupo() {
+        return esGrupo;
+    }
+
+    public ListaDobleEnlazada<Cancion> getListaCanciones() {
+        return listaCanciones;
+    }
+
+    public void setListaCanciones(ListaDobleEnlazada<Cancion> listaCanciones) {
+        this.listaCanciones = listaCanciones;
     }
 
     public String getCodigo() {
@@ -67,9 +91,9 @@ public class Autor implements Serializable, Comparable<Autor> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Autor)) return false;
-        Autor autor = (Autor) o;
-        return esGrupo == autor.esGrupo && Objects.equals(getCodigo(), autor.getCodigo()) && Objects.equals(getNombre(), autor.getNombre()) && Objects.equals(getNacionalidad(), autor.getNacionalidad()) && Objects.equals(listaCanciones, autor.listaCanciones);
+        if (!(o instanceof Artista)) return false;
+        Artista artista = (Artista) o;
+        return esGrupo == artista.esGrupo && Objects.equals(getCodigo(), artista.getCodigo()) && Objects.equals(getNombre(), artista.getNombre()) && Objects.equals(getNacionalidad(), artista.getNacionalidad()) && Objects.equals(listaCanciones, artista.listaCanciones);
     }
 
     @Override
@@ -78,7 +102,7 @@ public class Autor implements Serializable, Comparable<Autor> {
     }
 
     @Override
-    public int compareTo(Autor o) {
+    public int compareTo(Artista o) {
         return this.nombre.compareTo(o.getNombre());
     }
 }
