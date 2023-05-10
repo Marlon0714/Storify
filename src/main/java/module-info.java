@@ -5,5 +5,11 @@ module co.edu.uniquindio {
     requires java.logging;
 
     opens co.edu.uniquindio to javafx.fxml;
-    exports co.edu.uniquindio;
+    exports co.edu.uniquindio.storify.controller;
+    opens co.edu.uniquindio.storify.controller to javafx.fxml;
+    exports co.edu.uniquindio.storify.application;
+    opens co.edu.uniquindio.storify.application to javafx.fxml;
+    exports co.edu.uniquindio.storify.model;
 }
+
+
