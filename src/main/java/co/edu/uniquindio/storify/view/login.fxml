@@ -12,12 +12,12 @@
    <children>
       <Pane prefHeight="406.0" prefWidth="371.0" styleClass="Pane">
          <children>
-            <Button layoutX="81.0" layoutY="269.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Iniciar Sesión" />
-            <TextField layoutX="29.0" layoutY="90.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
-            <Button layoutX="81.0" layoutY="321.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Registrarse" />
+            <Button fx:id="btnLogin" layoutX="81.0" layoutY="269.0" mnemonicParsing="false" onAction="#actionLogin" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Iniciar Sesión" />
+            <TextField fx:id="txtUsername" layoutX="29.0" layoutY="90.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
+            <Button fx:id="btnRegistro" layoutX="81.0" layoutY="321.0" mnemonicParsing="false" onAction="#actionRegistro" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Registrarse" />
             <Label layoutX="29.0" layoutY="67.0" styleClass="label-white" text="Nombre de Usuario" />
             <Label layoutX="29.0" layoutY="148.0" styleClass="label-white" text="Contraseña" />
-            <PasswordField layoutX="29.0" layoutY="178.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
+            <PasswordField fx:id="pswdField" layoutX="29.0" layoutY="178.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
             <Label layoutX="104.0" layoutY="14.0" styleClass="label-white" text="Bienvenido" />
          </children>
       </Pane>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="694.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox prefHeight="694.0" prefWidth="906.0">
+         <children>
+            <HBox prefHeight="704.0" prefWidth="912.0" styleClass="Pane">
+               <children>
+                  <Pane prefHeight="694.0" prefWidth="200.0" styleClass="sidebar">
+                     <children>
+                        <Button layoutX="36.0" layoutY="67.0" mnemonicParsing="false" styleClass="sidebar-button" text="Regresar" />
+                     </children></Pane>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox layoutX="248.0" layoutY="49.0" prefHeight="168.0" prefWidth="591.0">
+         <children>
+            <Pane prefHeight="17.0" prefWidth="589.0" styleClass="background-pane">
+               <children>
+                  <Button layoutX="73.0" layoutY="129.0" mnemonicParsing="false" styleClass="button" text="Buscar por Artista" />
+                  <Button layoutX="261.0" layoutY="129.0" mnemonicParsing="false" styleClass="button" text="Búsqueda O" />
+                  <Button layoutX="431.0" layoutY="129.0" mnemonicParsing="false" styleClass="button" text="Búsqueda Y" />
+                  <TextField layoutX="14.0" layoutY="23.0" promptText="Artista" styleClass="text-field-alternative" />
+                  <TextField layoutX="14.0" layoutY="59.0" promptText="Canción" styleClass="text-field-alternative" />
+                  <TextField layoutX="220.0" layoutY="23.0" promptText="Álbum" styleClass="text-field-alternative" />
+                  <TextField layoutX="220.0" layoutY="59.0" promptText="Año" styleClass="text-field-alternative" />
+                  <TextField layoutX="406.0" layoutY="23.0" promptText="Género" styleClass="text-field-alternative" />
+                  <TextField layoutX="406.0" layoutY="59.0" promptText="Duración" styleClass="text-field-alternative" />
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+      <HBox layoutX="228.0" layoutY="310.0" prefHeight="348.0" prefWidth="677.0">
+         <children>
+            <Pane prefHeight="349.0" prefWidth="706.0">
+               <children>
+                  <TableView prefHeight="349.0" prefWidth="687.0" styleClass="table-view">
+                    <columns>
+                      <TableColumn prefWidth="136.0" styleClass="column-header" text="Canción" />
+                      <TableColumn minWidth="0.0" prefWidth="119.0" text="Artista" />
+                        <TableColumn minWidth="0.0" prefWidth="119.0" text="Álbum" />
+                        <TableColumn minWidth="0.0" prefWidth="119.0" text="Duración" />
+                        <TableColumn minWidth="0.0" prefWidth="94.0" text="Género" />
+                        <TableColumn minWidth="0.0" prefWidth="98.0" text="Año" />
+                    </columns>
+                  </TableView>
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

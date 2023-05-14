@@ -3,6 +3,10 @@ module co.edu.uniquindio {
     requires javafx.fxml;
     requires java.desktop;
     requires java.logging;
+    requires chrriis.dj.nativeswing.swtimpl;
+    requires chrriis.dj.nativeswing;
+    requires jxbrowser;
+    requires jxbrowser.javafx;
 
     opens co.edu.uniquindio to javafx.fxml;
     exports co.edu.uniquindio.storify.controller;
