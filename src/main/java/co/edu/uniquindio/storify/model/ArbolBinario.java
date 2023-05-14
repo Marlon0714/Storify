@@ -1,8 +1,10 @@
 package co.edu.uniquindio.storify.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
-public class ArbolBinario<T extends Comparable<T> & Serializable> implements Serializable {
+public class ArbolBinario<T extends Comparable<T> & Serializable> implements Serializable, Iterable<T> {
+
     public static class Nodo<T extends Comparable<T> & Serializable> implements Serializable {
 
         private T valor;
@@ -149,6 +151,46 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
             return buscar(nodoActual.getIzq(), valor); // buscar en el subárbol izquierdo
         } else {
             return buscar(nodoActual.getDer(), valor); // buscar en el subárbol derecho
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArbolIterator();
+    }
+    private class ArbolIterator implements Iterator<T> {
+        private Nodo<T> siguienteNodo;
+        private final Pila<Nodo<T>> pila;
+
+        public ArbolIterator() {
+            siguienteNodo = raiz;
+            pila = new Pila<>();
+            avanzarHastaSiguienteNodo();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return siguienteNodo != null;
+        }
+
+        @Override
+        public T next() {
+            Nodo<T> nodoActual = siguienteNodo;
+            avanzarHastaSiguienteNodo();
+            return nodoActual.getValor();
+        }
+
+        private void avanzarHastaSiguienteNodo() {
+            while (!pila.isEmpty() || siguienteNodo != null) {
+                if (siguienteNodo != null) {
+                    pila.push(siguienteNodo);
+                    siguienteNodo = siguienteNodo.getIzq();
+                } else {
+                    siguienteNodo = pila.pop();
+                    siguienteNodo = siguienteNodo.getDer();
+                    break;
+                }
+            }
         }
     }
 }

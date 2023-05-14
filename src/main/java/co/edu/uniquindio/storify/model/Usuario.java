@@ -9,6 +9,8 @@ public class Usuario implements Serializable {
     private String password;
     private String email;
     private ListaCircular<Cancion> listaCancionesFavoritas;
+    private Pila<Accion> acciones;
+    private Pila<Accion> accionesDesechas;
 
     public Usuario(String username, String password, String email, ListaCircular<Cancion> listaCancionesFavoritas) {
         this.username = username;
@@ -44,12 +46,28 @@ public class Usuario implements Serializable {
         this.email = email;
     }
 
-    public ListaCircular<Cancion> getCancionesFavoritas() {
+    public ListaCircular<Cancion> getListaCancionesFavoritas() {
         return listaCancionesFavoritas;
     }
 
-    public void setCancionesFavoritas(ListaCircular<Cancion> listaCancionesFavoritas) {
+    public void setListaCancionesFavoritas(ListaCircular<Cancion> listaCancionesFavoritas) {
         this.listaCancionesFavoritas = listaCancionesFavoritas;
+    }
+
+    public Pila<Accion> getAcciones() {
+        return acciones;
+    }
+
+    public void setAcciones(Pila<Accion> acciones) {
+        this.acciones = acciones;
+    }
+
+    public Pila<Accion> getAccionesDesechas() {
+        return accionesDesechas;
+    }
+
+    public void setCancionesEliminadas(Pila<Accion> accionesDesechas) {
+        this.accionesDesechas = accionesDesechas;
     }
 
     public void agregarCancion(Cancion cancion) {
@@ -59,8 +77,33 @@ public class Usuario implements Serializable {
     public void eliminarCancion(Cancion cancion) {
         listaCancionesFavoritas.eliminar(cancion);
     }
+
     public void ordenarCanciones(Comparator<Cancion> comparador) {
         listaCancionesFavoritas.ordenar(comparador);
+    }
+
+    public void deshacer() {
+        if (!acciones.isEmpty()) {
+            Accion ultimaAccion = acciones.pop();
+            if (ultimaAccion.getTipo() == Accion.Tipo.INSERCION) {
+                eliminarCancion(ultimaAccion.getElemento());
+            } else if (ultimaAccion.getTipo() == Accion.Tipo.ELIMINACION) {
+                agregarCancion(ultimaAccion.getElemento());
+            }
+            accionesDesechas.push(ultimaAccion);
+        }
+    }
+
+    public void rehacer() {
+        if (!accionesDesechas.isEmpty()) {
+            Accion ultimaAccion = accionesDesechas.pop();
+            if (ultimaAccion.getTipo() == Accion.Tipo.INSERCION) {
+                agregarCancion(ultimaAccion.getElemento());
+            } else if (ultimaAccion.getTipo() == Accion.Tipo.ELIMINACION) {
+                eliminarCancion(ultimaAccion.getElemento());
+            }
+            acciones.push(ultimaAccion);
+        }
     }
 
     @Override
@@ -68,11 +111,11 @@ public class Usuario implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Usuario)) return false;
         Usuario usuario = (Usuario) o;
-        return getUsername().equals(usuario.getUsername()) && getPassword().equals(usuario.getPassword()) && Objects.equals(getEmail(), usuario.getEmail()) && Objects.equals(listaCancionesFavoritas, usuario.listaCancionesFavoritas);
+        return getUsername().equals(usuario.getUsername()) && getPassword().equals(usuario.getPassword()) && getEmail().equals(usuario.getEmail());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUsername(), getPassword(), getEmail(), listaCancionesFavoritas);
+        return Objects.hash(getUsername(), getPassword(), getEmail());
     }
 }

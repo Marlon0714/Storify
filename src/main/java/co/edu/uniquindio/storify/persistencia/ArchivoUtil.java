@@ -241,5 +241,5 @@ public  class ArchivoUtil {
         codificadorXML.close();
 
     }
-    
+
 }

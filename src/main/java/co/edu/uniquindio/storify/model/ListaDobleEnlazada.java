@@ -141,6 +141,15 @@ public class ListaDobleEnlazada<T extends Serializable> implements Serializable,
         }
     }
 
+    /**
+     * Método para agregar todos los elementos de otra lista a esta lista.
+     */
+    public void addAll(ListaDobleEnlazada<T> otraLista) {
+        for (T valor : otraLista) {
+            insertar(valor);
+        }
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new ListaIterator();

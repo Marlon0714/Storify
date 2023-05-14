@@ -2,8 +2,10 @@ package co.edu.uniquindio.storify.model;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-public class ListaCircular<T extends Serializable> implements Serializable{
+public class ListaCircular<T extends Serializable> implements Serializable, Iterable<T> {
 
     public static class Nodo<T extends Serializable> implements Serializable{
         // Variable en la cual se va a guardar el valor.
@@ -184,6 +186,37 @@ public class ListaCircular<T extends Serializable> implements Serializable{
             if(nuevoNodo.getSiguiente() == inicio){
                 fin = nuevoNodo;
             }
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ListaIterator();
+    }
+
+    private class ListaIterator implements Iterator<T> {
+
+        private Nodo<T> nodoActual;
+
+        public ListaIterator() {
+            nodoActual = inicio;
+            fin.setSiguiente(null);
+            inicio.setAnterior(null);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return nodoActual != null;
+        }
+
+        @Override
+        public T next() {
+            if (hasNext()) {
+                T valor = nodoActual.getValor();
+                nodoActual = nodoActual.getSiguiente();
+                return valor;
+            }
+            throw new NoSuchElementException();
         }
     }
 }
