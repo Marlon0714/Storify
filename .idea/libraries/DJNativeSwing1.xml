@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="DJNativeSwing1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../DjNativeSwing/DJNativeSwing.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

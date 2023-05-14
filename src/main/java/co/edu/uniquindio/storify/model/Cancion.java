@@ -8,14 +8,16 @@ public class Cancion implements Serializable {
     private String nombre;
     private String album;
     private String caratula;
+    private String codigoArtista;
     private int anio;
     private int duracion;
     private String genero;
     private String urlYoutube;
 
-    public Cancion(String codigo, String nombre, String album, String caratula, int anio, int duracion, String genero, String urlYoutube) {
+    public Cancion(String codigo, String nombre,String codigoArtista, String album, String caratula, int anio, int duracion, String genero, String urlYoutube) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.codigoArtista = codigoArtista;
         this.album = album;
         this.caratula = caratula;
         this.anio = anio;
@@ -37,6 +39,7 @@ public class Cancion implements Serializable {
     public String getAlbum() {
         return album;
     }
+    public String getCodigoArtista() {return codigoArtista;}
 
     public String getCaratula() {
         return caratula;
@@ -63,6 +66,7 @@ public class Cancion implements Serializable {
         return "Cancion{" +
                 "codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
+                ", codigo Artista='" + codigoArtista + '\'' +
                 ", album='" + album + '\'' +
                 ", caratula='" + caratula + '\'' +
                 ", anio=" + anio +

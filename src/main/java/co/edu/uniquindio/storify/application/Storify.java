@@ -16,9 +16,9 @@ public class Storify extends Application {
         @Override
         public void start(Stage stage) throws IOException {
             // Crear el contenido de la escena
-            URL url = new File ("src/main/java/co/edu/uniquindio/storify/view/gui1.fxml").toURI().toURL();
+            URL url = new File ("src/main/java/co/edu/uniquindio/storify/view/login.fxml").toURI().toURL();
             Parent root = FXMLLoader.load(url);
-            Scene scene = new Scene(root, 906 , 694);
+            Scene scene = new Scene(root,600,406 );
             URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
             scene.getStylesheets().add(url1.toExternalForm());
 
