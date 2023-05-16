@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 
 public class ListaCircular<T extends Serializable> implements Serializable, Iterable<T> {
 
-    public static class Nodo<T extends Serializable> implements Serializable{
+    public static class Nodo<T extends Serializable> implements Serializable {
         // Variable en la cual se va a guardar el valor.
         private T valor;
         // Variable para enlazar los nodos.

@@ -1,6 +1,7 @@
 package co.edu.uniquindio.storify.controller;
 
 import co.edu.uniquindio.storify.model.*;
+import co.edu.uniquindio.storify.persistencia.Persistencia;
 import javafx.scene.control.Alert;
 
 import java.io.File;
@@ -30,7 +31,7 @@ public class ModelFactoryController {
 
 
     private static class SingletonHolder {
-        private final static ModelFactoryController eINSTANCE = new ModelFactoryController();
+        private static final  ModelFactoryController eINSTANCE = new ModelFactoryController();
     }
     /**
      *Metodo para obtener la instancia de la clase
@@ -41,6 +42,7 @@ public class ModelFactoryController {
 
     public ModelFactoryController(){
         usuariologgeado = new Usuario();
+        cargarRecursoXML();
         if(tiendaMusica == null){
             System.out.println("es null");
             tiendaMusica = new TiendaMusica();
@@ -54,22 +56,35 @@ public class ModelFactoryController {
             Cancion cancionB = new Cancion("2","Rude","2","Don't Kill the Magic","src/main/java/co/edu/uniquindio/storify/persistencia/Carátulas/DontKillTheMagic.png",2014,345,"Pop","https://youtu.be/PIh2xe4jnpk");
             Cancion cancionC = new Cancion("3","Animals","3","V","src/main/java/co/edu/uniquindio/storify/persistencia/Carátulas/V.jpg",2015,440,"Rock","https://youtu.be/qpgTC9MDx1o");
             ListaCircular<Cancion> list = new ListaCircular<>();
-            Usuario a = new Usuario("a","a","a",list);
-            list.insertar(cancionA);
-            list.insertar(cancionB);
-            list.insertar(cancionC);
             list1.insertar(cancionB);
             songs.insertar(cancionA);
             list2.insertar(cancionC);
+            list.insertar(cancionA);
+            list.insertar(cancionB);
+            list.insertar(cancionC);
+            Usuario a = new Usuario("a","a","a",list);
             tiendaMusica.agregarUsuario(a);
+            tiendaMusica.guardarCancion(a,cancionA);
             tiendaMusica.agregarArtista(artista);
             tiendaMusica.agregarArtista(artista1);
             tiendaMusica.agregarArtista(artista2);
 
+            ArbolBinario<Artista> arb = tiendaMusica.getArtistas();
+            for(Artista artist : arb){
+                System.out.println(artist.getNombre());
+            }
+            guardarRecursoXML();
         }
 
     }
 
+    private void cargarRecursoXML() {
+        tiendaMusica = Persistencia.cargarRecursoBinario();
+    }
+
+    private void guardarRecursoXML() {
+        Persistencia.guardarRecursoBinario(tiendaMusica);
+    }
     public void iniciarSesion(String username, String password) throws MalformedURLException {
         usuariologgeado = tiendaMusica.iniciarSesion(username,password);
         if(usuariologgeado == null){
@@ -81,12 +96,14 @@ public class ModelFactoryController {
         tiendaMusica.eliminarCancion(usuariologgeado,cancionSeleccion);
     }
     public ListaCircular<Cancion> tomarListaCancionesFavoritas() {
-        return usuariologgeado.getCancionesFavoritas();
+        return usuariologgeado.getListaCancionesFavoritas();
     }
     public Artista obtenerAutor(Cancion cancionA){
-        Artista artista1 = new Artista();
-        artista1.setCodigo(cancionA.getCodigoArtista());
-        return tiendaMusica.getArtistas().buscar(artista1);
+        return tiendaMusica.buscarArtista(cancionA.getCodigoArtista());
+    }
+
+    public Cancion buscarCancion(String codigoCancion) {
+        return tiendaMusica.buscarCancion(codigoCancion);
     }
 
     private void showErrorDialog(String message) throws MalformedURLException {

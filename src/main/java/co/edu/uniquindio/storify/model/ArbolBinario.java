@@ -2,6 +2,7 @@ package co.edu.uniquindio.storify.model;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ArbolBinario<T extends Comparable<T> & Serializable> implements Serializable, Iterable<T> {
 
@@ -65,8 +66,10 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
         Nodo<T> nuevoNodo = new Nodo<>(valor, null, null);
         if (raiz == null) {
             raiz = nuevoNodo;
+
         } else {
             insertar(raiz, nuevoNodo);
+
         }
     }
 
@@ -76,12 +79,16 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
                 nodoActual.setIzq(nuevoNodo);
             } else {
                 insertar(nodoActual.getIzq(), nuevoNodo);
+
             }
         } else {
             if (nodoActual.getDer() == null) {
                 nodoActual.setDer(nuevoNodo);
+
             } else {
+
                 insertar(nodoActual.getDer(), nuevoNodo);
+
             }
         }
     }
@@ -159,37 +166,36 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
         return new ArbolIterator();
     }
     private class ArbolIterator implements Iterator<T> {
-        private Nodo<T> siguienteNodo;
         private final Pila<Nodo<T>> pila;
 
         public ArbolIterator() {
-            siguienteNodo = raiz;
             pila = new Pila<>();
-            avanzarHastaSiguienteNodo();
+            if (raiz != null) {
+                avanzarHastaPrimerNodo(raiz);
+            }
         }
 
         @Override
         public boolean hasNext() {
-            return siguienteNodo != null;
+            return !pila.isEmpty();
         }
 
         @Override
         public T next() {
-            Nodo<T> nodoActual = siguienteNodo;
-            avanzarHastaSiguienteNodo();
-            return nodoActual.getValor();
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            Nodo<T> siguienteNodo = pila.pop();
+            if (siguienteNodo.getDer() != null) {
+                avanzarHastaPrimerNodo(siguienteNodo.getDer());
+            }
+            return siguienteNodo.getValor();
         }
 
-        private void avanzarHastaSiguienteNodo() {
-            while (!pila.isEmpty() || siguienteNodo != null) {
-                if (siguienteNodo != null) {
-                    pila.push(siguienteNodo);
-                    siguienteNodo = siguienteNodo.getIzq();
-                } else {
-                    siguienteNodo = pila.pop();
-                    siguienteNodo = siguienteNodo.getDer();
-                    break;
-                }
+        private void avanzarHastaPrimerNodo(Nodo<T> nodo) {
+            while (nodo != null) {
+                pila.push(nodo);
+                nodo = nodo.getIzq();
             }
         }
     }

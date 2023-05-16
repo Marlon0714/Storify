@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Persistencia {
-    private static final String RUTA_ARCHIVO_TIENDA_MUSICA_XML = null;
+    private static final String RUTA_ARCHIVO_TIENDA_MUSICA_XML = "src/main/java/co/edu/uniquindio/storify/persistencia/persistencia.dat";
     static ArbolBinario<Artista> artistas = new ArbolBinario<>();
 
     public static ArbolBinario<Artista> cargarArtistas(String archivo) {
@@ -77,29 +77,29 @@ public class Persistencia {
             e.printStackTrace();
         }
     }
-    public static TiendaMusica cargarRecursoCasaXML() {
+    public static TiendaMusica cargarRecursoBinario() {
         TiendaMusica tiendaMusica = null;
         try {
 
-            CargarRecursoXML hiloCargarRecursoSerializado = new CargarRecursoXML(RUTA_ARCHIVO_TIENDA_MUSICA_XML);
+            CargarRecursoBinario hiloCargarRecursoSerializado = new CargarRecursoBinario(RUTA_ARCHIVO_TIENDA_MUSICA_XML);
 
             hiloCargarRecursoSerializado.start();
             hiloCargarRecursoSerializado.join();
 
-            tiendaMusica = (TiendaMusica) hiloCargarRecursoSerializado.getObjetoXML();
+            tiendaMusica = (TiendaMusica) hiloCargarRecursoSerializado.getAux();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return tiendaMusica;
     }
-    public static void guardarRecursoCasaXML(TiendaMusica tiendaMusica) {
+    public static void guardarRecursoBinario(TiendaMusica tiendaMusica) {
         try {
 
-            GuardarRecursoXML hiloGuardarRecursoXML = new GuardarRecursoXML(RUTA_ARCHIVO_TIENDA_MUSICA_XML, tiendaMusica);
+            GuardarRecursoBinario hiloGuardarRecursoBinario = new GuardarRecursoBinario(RUTA_ARCHIVO_TIENDA_MUSICA_XML, tiendaMusica);
 
-            hiloGuardarRecursoXML.start();
-            hiloGuardarRecursoXML.join();
+            hiloGuardarRecursoBinario.start();
+            hiloGuardarRecursoBinario.join();
 
         } catch (Exception e) {
             e.printStackTrace();

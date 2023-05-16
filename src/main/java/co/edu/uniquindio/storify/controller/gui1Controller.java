@@ -5,16 +5,14 @@ import co.edu.uniquindio.storify.model.Artista;
 import co.edu.uniquindio.storify.model.Cancion;
 import co.edu.uniquindio.storify.model.ListaCircular;
 import com.teamdev.jxbrowser.browser.Browser;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import com.teamdev.jxbrowser.engine.Engine;
 import com.teamdev.jxbrowser.engine.EngineOptions;
 import com.teamdev.jxbrowser.view.javafx.BrowserView;
-
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -25,6 +23,7 @@ import javafx.stage.Stage;
 
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
@@ -98,7 +97,7 @@ public class gui1Controller {
     private TableColumn<Cancion, String> columnAlbum; // Value injected by FXMLLoader
 
     @FXML // fx:id="columnArtista"
-    private TableColumn<Artista, String> columnArtista; // Value injected by FXMLLoader
+    private TableColumn<Cancion, String> columnArtista; // Value injected by FXMLLoader
 
     @FXML // fx:id="columnAño"
     private TableColumn<Cancion, Integer> columnAño; // Value injected by FXMLLoader
@@ -130,27 +129,62 @@ public class gui1Controller {
 
     @FXML
     void actionOrdenAlbum(ActionEvent event) {
+        // Obtener la lista de elementos actualmente mostrados en la tabla
+        ObservableList<Cancion> items = tableCanciones.getItems();
 
+        // Ordenar la lista por el valor de la columna del álbum
+        FXCollections.sort(items, Comparator.comparing(Cancion::getAlbum));
+
+        // Actualizar la tabla con la lista ordenada
+        tableCanciones.setItems(items);
     }
 
     @FXML
     void actionOrdenAnio(ActionEvent event) {
+        // Obtener la lista de elementos actualmente mostrados en la tabla
+        ObservableList<Cancion> items = tableCanciones.getItems();
 
+        // Ordenar la lista por el valor de la columna del año
+        FXCollections.sort(items, Comparator.comparing(Cancion::getAnio));
+
+        // Actualizar la tabla con la lista ordenada
+        tableCanciones.setItems(items);
     }
 
     @FXML
     void actionOrdenDuracion(ActionEvent event) {
+        // Obtener la lista de elementos actualmente mostrados en la tabla
+        ObservableList<Cancion> items = tableCanciones.getItems();
 
+        // Ordenar la lista por el valor de la columna de la duración
+        FXCollections.sort(items, Comparator.comparing(Cancion::getDuracion));
+
+        // Actualizar la tabla con la lista ordenada
+        tableCanciones.setItems(items);
     }
 
     @FXML
     void actionOrdenGenero(ActionEvent event) {
+        // Obtener la lista de elementos actualmente mostrados en la tabla
+        ObservableList<Cancion> items = tableCanciones.getItems();
 
+        // Ordenar la lista por el valor de la columna del género
+        FXCollections.sort(items, Comparator.comparing(Cancion::getGenero));
+
+        // Actualizar la tabla con la lista ordenada
+        tableCanciones.setItems(items);
     }
 
     @FXML
     void actionOrdenarCancion(ActionEvent event) {
+        // Obtener la lista de elementos actualmente mostrados en la tabla
+        ObservableList<Cancion> items = tableCanciones.getItems();
 
+        // Ordenar la lista por el valor de la columna del nombre de la canción
+        FXCollections.sort(items, Comparator.comparing(Cancion::getNombre));
+
+        // Actualizar la tabla con la lista ordenada
+        tableCanciones.setItems(items);
     }
 
     @FXML
@@ -223,6 +257,14 @@ public class gui1Controller {
 
     private void loadTable() {
         columnCancion.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        columnArtista.setCellValueFactory(cellData -> {
+            Artista artista = modelFactoryController.obtenerAutor(cellData.getValue());
+            if (artista != null) {
+                return new SimpleStringProperty(artista.getNombre());
+            }else{
+                return new SimpleStringProperty("");
+            }
+        });
         columnAlbum.setCellValueFactory(new PropertyValueFactory<>("album"));
         columnGenero.setCellValueFactory(new PropertyValueFactory<>("genero"));
         columnAño.setCellValueFactory(new PropertyValueFactory<>("anio"));

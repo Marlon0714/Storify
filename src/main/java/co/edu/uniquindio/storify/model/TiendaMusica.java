@@ -80,7 +80,7 @@ public class TiendaMusica implements Serializable {
         artista.agregarCancion(nuevaCancion);
     }
 
-    private Artista buscarArtista(String codigo){
+    public Artista buscarArtista(String codigo){
         for(Artista artista : artistas){
             if(codigo.equals(artista.getCodigo())){
                 return artista;
@@ -89,7 +89,7 @@ public class TiendaMusica implements Serializable {
         return null;
     }
 
-    private Cancion buscarCancion(String codigo) {
+    public Cancion buscarCancion(String codigo) {
         for(Artista artista : artistas){
             for(Cancion cancion: artista.getCanciones()){
                 if(cancion.getCodigo().equals(codigo)){
@@ -241,12 +241,18 @@ public class TiendaMusica implements Serializable {
 
         // Buscar canciones en el artista actual
         for (Cancion cancion : nodo.getValor().getListaCanciones()) {
-            // Verificar si la canción coincide con al menos uno de los atributos proporcionados
-            if (cancion.getNombre().equalsIgnoreCase(cancionABuscar.getNombre()) && cancion.getGenero().equalsIgnoreCase(cancionABuscar.getGenero())
-                        && cancion.getAlbum().equalsIgnoreCase(cancionABuscar.getAlbum()) && cancion.getAnio() == (cancionABuscar.getAnio())) {
-                cancionesEncontradas.insertar(cancion);
-                break;
+            // Verificar si la canción coincide con los atributos proporcionados
+            boolean coincide = true;
+            boolean nombreNOCoincide = cancionABuscar.getNombre() != null && !cancionABuscar.getNombre().equalsIgnoreCase(cancion.getNombre());
+            boolean generoNOCoincide = cancionABuscar.getGenero() != null && !cancionABuscar.getGenero().equalsIgnoreCase(cancion.getGenero());
+            boolean albumNOCoincide = cancionABuscar.getAlbum() != null && !cancionABuscar.getAlbum().equalsIgnoreCase(cancion.getAlbum());
+            boolean anioNOCoincide = cancionABuscar.getAnio() != -1 && cancionABuscar.getAnio() != cancion.getAnio();
 
+            if (nombreNOCoincide || generoNOCoincide || albumNOCoincide || anioNOCoincide) {
+                coincide = false;
+            }
+            if(coincide){
+                cancionesEncontradas.insertar(cancion);
             }
         }
         cancionesEncontradas = buscarCancionesANDHelper(nodo.getIzq(), cancionABuscar, cancionesEncontradas);
