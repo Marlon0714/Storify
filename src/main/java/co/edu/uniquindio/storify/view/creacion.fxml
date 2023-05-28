@@ -9,49 +9,48 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="694.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="694.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.storify.controller.creacionController">
    <children>
-      <VBox prefHeight="694.0" prefWidth="932.0">
+      <VBox prefHeight="694.0" prefWidth="906.0">
          <children>
-            <HBox prefHeight="694.0" prefWidth="946.0" styleClass="Pane">
+            <HBox prefHeight="704.0" prefWidth="912.0" styleClass="Pane">
                <children>
                   <Pane prefHeight="694.0" prefWidth="200.0" styleClass="sidebar">
                      <children>
-                        <Button layoutX="36.0" layoutY="32.0" mnemonicParsing="false" styleClass="sidebar-button" text="Inicio" />
-                        <Button layoutX="36.0" layoutY="67.0" mnemonicParsing="false" styleClass="sidebar-button" text="Buscar canciones" />
+                        <Button fx:id="btnRegresar" layoutX="36.0" layoutY="67.0" mnemonicParsing="false" onAction="#actionRegresar" styleClass="sidebar-button" text="Regresar" />
                      </children></Pane>
                </children>
             </HBox>
          </children>
       </VBox>
-      <HBox layoutX="280.0" layoutY="21.0" prefHeight="241.0" prefWidth="642.0">
+      <HBox layoutX="248.0" layoutY="49.0" prefHeight="168.0" prefWidth="625.0">
          <children>
-            <Pane prefHeight="17.0" prefWidth="589.0" styleClass="background-pane">
+            <Pane prefHeight="17.0" prefWidth="626.0" styleClass="background-pane">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" styleClass="label-white" text="Crear Artista" />
-                  <TextField layoutX="14.0" layoutY="52.0" promptText="Nombre" styleClass="text-field-alternative" />
-                  <TextField layoutX="14.0" layoutY="96.0" promptText="Código" styleClass="text-field-alternative" />
-                  <TextField layoutX="317.0" layoutY="52.0" promptText="Nacionalidad" styleClass="text-field-alternative" />
-                  <ComboBox layoutX="316.0" layoutY="96.0" prefWidth="150.0" promptText="¿Es un grupo?" styleClass="combobox" />
-                  <Button layoutX="240.0" layoutY="181.0" mnemonicParsing="false" text="Crear" />
+                  <Button fx:id="btnCrearArtista" layoutX="252.0" layoutY="129.0" mnemonicParsing="false" onAction="#actionCrearArtista" styleClass="button" text="Crear Artista" />
+                  <TextField fx:id="txtArtista" layoutX="14.0" layoutY="23.0" promptText="Artista" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtNacionalidad" layoutX="220.0" layoutY="23.0" promptText="Nacionalidad" styleClass="text-field-alternative" />
+                  <ComboBox fx:id="comboGrupo" layoutX="428.0" layoutY="23.0" prefHeight="25.0" prefWidth="139.0" promptText="Es un grupo" styleClass="combobox" />
+                  <TextField fx:id="txtCodigo" layoutX="14.0" layoutY="72.0" promptText="Código" styleClass="text-field-alternative" />
+                  <Label layoutX="14.0" layoutY="-8.0" prefHeight="17.0" prefWidth="109.0" styleClass="label-white" text="Crear Artista" />
                </children>
             </Pane>
          </children>
       </HBox>
-      <HBox layoutX="290.0" layoutY="320.0" prefHeight="241.0" prefWidth="642.0">
+      <HBox layoutX="258.0" layoutY="332.0" prefHeight="239.0" prefWidth="625.0">
          <children>
-            <Pane prefHeight="241.0" prefWidth="623.0" styleClass="background-pane">
+            <Pane prefHeight="17.0" prefWidth="626.0" styleClass="background-pane">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" styleClass="label-white" text="Agregar Canción" />
-                  <TextField layoutX="14.0" layoutY="52.0" promptText="Nombre" styleClass="text-field-alternative" />
-                  <TextField layoutX="14.0" layoutY="96.0" promptText="Código Artista" styleClass="text-field-alternative" />
-                  <TextField layoutX="226.0" layoutY="52.0" promptText="Álbum" styleClass="text-field-alternative" />
-                  <Button layoutX="242.0" layoutY="202.0" mnemonicParsing="false" text="Agregar" />
-                  <TextField layoutX="226.0" layoutY="96.0" promptText="Año" styleClass="text-field-alternative" />
-                  <TextField layoutX="426.0" layoutY="52.0" promptText="Género" styleClass="text-field-alternative" />
-                  <TextField layoutX="426.0" layoutY="96.0" promptText="Duración" styleClass="text-field-alternative" />
-                  <TextField layoutX="14.0" layoutY="137.0" promptText="Carátula" styleClass="text-field-alternative" />
-                  <TextField layoutX="226.0" layoutY="137.0" promptText="Url youtube" styleClass="text-field-alternative" />
+                  <Button fx:id="btnCrearCancion" layoutX="258.0" layoutY="194.0" mnemonicParsing="false" onAction="#actionCrearCancion" styleClass="button" text="Añadir Canción" />
+                  <TextField fx:id="txtCancion" layoutX="14.0" layoutY="23.0" promptText="Cancion" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtAlbum" layoutX="232.0" layoutY="78.0" promptText="Album" styleClass="text-field-alternative" />
+                  <ComboBox fx:id="comboGenero" layoutX="436.0" layoutY="23.0" prefHeight="25.0" prefWidth="139.0" promptText="Género" styleClass="combobox" />
+                  <TextField fx:id="txtAnio" layoutX="14.0" layoutY="78.0" promptText="Año" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtDuracion" layoutX="436.0" layoutY="78.0" promptText="Duracion" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtCaratula" layoutX="14.0" layoutY="135.0" prefHeight="25.0" prefWidth="200.0" promptText="Ruta Caratula" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtUrl" layoutX="313.0" layoutY="135.0" prefHeight="25.0" prefWidth="230.0" promptText="Url youtube" styleClass="text-field-alternative" />
+                  <ComboBox fx:id="comboArtista" layoutX="232.0" layoutY="23.0" prefHeight="25.0" prefWidth="139.0" promptText="Artista" styleClass="combobox" />
+                  <Label layoutX="14.0" layoutY="-8.0" prefHeight="17.0" prefWidth="109.0" styleClass="label-white" text="Crear Canción" />
                </children>
             </Pane>
          </children>

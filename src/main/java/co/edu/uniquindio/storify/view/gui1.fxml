@@ -18,7 +18,7 @@
                <children>
                   <Pane prefHeight="694.0" prefWidth="200.0" styleClass="sidebar">
                      <children>
-                        <Button fx:id="btnBuscar" layoutX="36.0" layoutY="67.0" mnemonicParsing="false" onAction="#actionBuscar" styleClass="sidebar-button" text="Buscar canciones" />
+                        <Button fx:id="btnBuscar" layoutX="14.0" layoutY="66.0" mnemonicParsing="false" onAction="#actionBuscar" styleClass="sidebar-button" text="Buscar canciones" />
                         <Separator layoutY="365.0" prefHeight="0.0" prefWidth="200.0" styleClass="separator" />
                         <Button fx:id="btnArtista" layoutX="36.0" layoutY="448.0" mnemonicParsing="false" onAction="#actionOrdenArtista" prefHeight="25.0" prefWidth="108.0" styleClass="sidebar-button" text="Artista" />
                         <Button fx:id="btnCancion" layoutX="36.0" layoutY="407.0" mnemonicParsing="false" onAction="#actionOrdenarCancion" prefHeight="25.0" prefWidth="108.0" styleClass="sidebar-button" text="Canción" />
@@ -27,6 +27,9 @@
                         <Button fx:id="btnAlbum" layoutX="36.0" layoutY="492.0" mnemonicParsing="false" onAction="#actionOrdenAlbum" prefHeight="25.0" prefWidth="108.0" styleClass="sidebar-button" text="Álbum" />
                         <Button fx:id="btnAnio" layoutX="36.0" layoutY="625.0" mnemonicParsing="false" onAction="#actionOrdenAnio" prefHeight="25.0" prefWidth="108.0" styleClass="sidebar-button" text="Año" />
                         <Label layoutX="14.0" layoutY="375.0" styleClass="label-white" text="Ordenar por:" />
+                        <Button fx:id="btnConsultar" layoutX="14.0" layoutY="122.0" mnemonicParsing="false" onAction="#actionConsultar" styleClass="sidebar-button" text="Consultar Top" />
+                        <Button fx:id="btnDeshacer" layoutX="14.0" layoutY="177.0" mnemonicParsing="false" onAction="#actionDeshacer" styleClass="sidebar-button" text="Deshacer" />
+                        <Button fx:id="btnRehacer" layoutX="15.0" layoutY="226.0" mnemonicParsing="false" onAction="#actionRehacer" styleClass="sidebar-button" text="Rehacer" />
                      </children></Pane>
                </children>
             </HBox>
@@ -39,7 +42,7 @@
                   <Button fx:id="btnReproducir" layoutX="141.0" layoutY="129.0" mnemonicParsing="false" onAction="#actionReproducir" styleClass="button" text="Reproducir" />
                   <Button fx:id="brnEliminar" layoutX="343.0" layoutY="129.0" mnemonicParsing="false" onAction="#actionEliminar" styleClass="button-custom" text="Eliminar de mi lista" />
                   <Label fx:id="labelTitle" layoutX="215.0" layoutY="14.0" styleClass="label-white" text="Label" />
-                  <Label fx:id="labelAlbum" layoutX="365.0" layoutY="14.0" styleClass="label-white" text="Label" />
+                  <Label fx:id="labelAlbum" layoutX="431.0" layoutY="14.0" styleClass="label-white" text="Label" />
                   <Label fx:id="imageLabel" layoutX="14.0" layoutY="14.0" prefHeight="111.0" prefWidth="134.0" styleClass="image-label" />
                   <Label fx:id="labelDuracion" layoutX="215.0" layoutY="84.0" styleClass="label-white" text="Label" />
                   <Label fx:id="labelGenero" layoutX="365.0" layoutY="84.0" styleClass="label-white" text="Género" />
@@ -47,15 +50,15 @@
                   <Label fx:id="labelTitle1" layoutX="187.0" layoutY="6.0" prefHeight="17.0" prefWidth="51.0" styleClass="label-white-alternative" text="Nombre:" />
                   <Label fx:id="labelDuracion1" layoutX="194.0" layoutY="76.0" prefHeight="17.0" prefWidth="68.0" styleClass="label-white-alternative" text="Duración:" />
                   <Label fx:id="labelGenero1" layoutX="331.0" layoutY="76.0" prefHeight="17.0" prefWidth="68.0" styleClass="label-white-alternative" text="Género:" />
-                  <Label fx:id="labelAlbum1" layoutX="331.0" layoutY="6.0" prefHeight="17.0" prefWidth="68.0" styleClass="label-white-alternative" text="Álbum" />
+                  <Label fx:id="labelAlbum1" layoutX="425.0" layoutY="6.0" prefHeight="17.0" prefWidth="68.0" styleClass="label-white-alternative" text="Álbum" />
                   <Label fx:id="labelAnio1" layoutX="493.0" layoutY="45.0" prefHeight="17.0" prefWidth="68.0" styleClass="label-white-alternative" text="Año:" />
                </children>
             </Pane>
          </children>
       </HBox>
-      <HBox layoutX="228.0" layoutY="310.0" prefHeight="348.0" prefWidth="677.0">
+      <HBox layoutX="228.0" layoutY="313.0" prefHeight="345.0" prefWidth="677.0">
          <children>
-            <Pane prefHeight="349.0" prefWidth="706.0">
+            <Pane prefHeight="363.0" prefWidth="677.0">
                <children>
                   <TableView fx:id="tableCanciones" prefHeight="349.0" prefWidth="687.0" styleClass="table-view">
                     <columns>
@@ -67,6 +70,15 @@
                         <TableColumn fx:id="columnAño" minWidth="0.0" prefWidth="98.0" styleClass="column-header" text="Año" />
                     </columns>
                   </TableView>
+               </children>
+            </Pane>
+         </children>
+      </HBox>
+      <HBox layoutX="236.0" layoutY="235.0" prefHeight="60.0" prefWidth="613.0">
+         <children>
+            <Pane prefHeight="17.0" prefWidth="589.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="22.0" styleClass="label-white" text="Lista de favoritas:" />
                </children>
             </Pane>
          </children>

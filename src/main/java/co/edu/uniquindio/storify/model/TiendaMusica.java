@@ -73,13 +73,14 @@ public class TiendaMusica implements Serializable {
         if(artista == null){
             return;
         }
-        for (Cancion cancion : artista.getCanciones()){
-            if(cancion.getNombre().equalsIgnoreCase(nombre)){
+        for (Cancion cancion : artista.getCanciones()) {
+            if(cancion.getNombre().equals(nombre)){
                 throw new ExistingSongException("Cancion ya registrada");
             }
         }
-        Cancion nuevaCancion = new Cancion(generarCodigoUnico(), nombre,codigoArtista,album,caratula,anio,duracion,genero,urlYoutube);
+        Cancion nuevaCancion = new Cancion(generarCodigoUnico(),nombre,codigoArtista,album,caratula,anio,duracion,genero,urlYoutube);
         artista.agregarCancion(nuevaCancion);
+        System.out.println(urlYoutube);
     }
 
     private String generarCodigoUnico() {
@@ -148,6 +149,7 @@ public class TiendaMusica implements Serializable {
     }
 
     // Buscar canciones que coinciden con al menos uno de los atributos proporcionados
+
     public ListaDobleEnlazada<Cancion> buscarCancionesOR(Cancion cancionABuscar) {
         // Implementación de búsqueda de canciones
         // Crear una lista para almacenar las canciones encontradas
@@ -161,6 +163,7 @@ public class TiendaMusica implements Serializable {
                     || cancion.getAnio() == cancionABuscar.getAnio()
                     || cancion.getCodigoArtista().equalsIgnoreCase(cancionABuscar.getCodigoArtista())) {
                 cancionesEncontradas.insertar(cancion);
+                break;
             }
         }
 
@@ -222,7 +225,6 @@ public class TiendaMusica implements Serializable {
         return cancionesEncontradas;
     }
 
-    // Buscar canciones que coinciden con todos los atributos proporcionados
     public ListaDobleEnlazada<Cancion> buscarCancionesAND(Cancion cancionABuscar) {
         // Implementación de búsqueda de canciones
         // Crear una lista para almacenar las canciones encontradas
@@ -326,14 +328,6 @@ public class TiendaMusica implements Serializable {
         }
     }
 
-    public ListaDobleEnlazada<Cancion> obtenerCanciones() {
-        ListaDobleEnlazada<Cancion> canciones = new ListaDobleEnlazada<>();
-        for (Artista artista : artistas) {
-            canciones.addAll(artista.getCanciones());
-        }
-        return canciones;
-    }
-
     // Guardar una canción en la lista del usuario
     public void guardarCancion(Usuario usuario, Cancion cancion) {
         usuario.agregarCancion(cancion);
@@ -380,6 +374,7 @@ public class TiendaMusica implements Serializable {
                 generoMasCanciones = genero;
             }
         }
+
         return generoMasCanciones;
     }
 
@@ -390,12 +385,12 @@ public class TiendaMusica implements Serializable {
         for (Usuario usuario : usuarios.values()) {
             // Obtener la lista de canciones favoritas del usuario
             ListaCircular<Cancion> listaCancionesFavoritas = usuario.getListaCancionesFavoritas();
-
+            //System.out.println(usuario.getUsername());
             // Recorrer la lista de canciones favoritas del usuario
             for (Cancion cancion : listaCancionesFavoritas) {
                 // Obtener el artista de la canción
                 Artista artista = buscarArtista(cancion.getCodigoArtista());
-
+                //System.out.println(artista.getNombre());
                 // Incrementar el contador del artista
                 contadorArtistas.put(artista, contadorArtistas.getOrDefault(artista, 0) + 1);
             }
@@ -412,10 +407,18 @@ public class TiendaMusica implements Serializable {
             if (contador > maxContador) {
                 maxContador = contador;
                 artistaMasPopular = artista;
+                System.out.println(artista+" "+contador);
             }
         }
 
         return artistaMasPopular;
+    }
+    public ListaDobleEnlazada<Cancion> obtenerCanciones() {
+        ListaDobleEnlazada<Cancion> canciones = new ListaDobleEnlazada<>();
+        for (Artista artista : artistas) {
+            canciones.addAll(artista.getCanciones());
+        }
+        return canciones;
     }
 
 }

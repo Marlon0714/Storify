@@ -118,7 +118,7 @@ public class Cancion implements Serializable, Comparator<Cancion> {
         if (this == o) return true;
         if (!(o instanceof Cancion)) return false;
         Cancion cancion = (Cancion) o;
-        return getAnio() == cancion.getAnio() && getDuracion() == cancion.getDuracion() && getCodigo().equals(cancion.getCodigo()) && Objects.equals(getNombre(), cancion.getNombre()) && Objects.equals(getAlbum(), cancion.getAlbum()) && Objects.equals(getCaratula(), cancion.getCaratula()) && Objects.equals(getGenero(), cancion.getGenero()) && Objects.equals(getUrlYoutube(), cancion.getUrlYoutube());
+        return getAnio() == cancion.getAnio() && getDuracion() == cancion.getDuracion() && /***getCodigo().equals(cancion.getCodigo()) &&**/ Objects.equals(getNombre(), cancion.getNombre()) && Objects.equals(getAlbum(), cancion.getAlbum()) && Objects.equals(getCaratula(), cancion.getCaratula()) && Objects.equals(getGenero(), cancion.getGenero()) && Objects.equals(getUrlYoutube(), cancion.getUrlYoutube());
     }
 
     @Override

@@ -51,7 +51,7 @@ public class Persistencia {
                     seccionCanciones = true;
                 } else if (seccionCanciones) {
                     String[] datosCancion = linea.split(";");
-                    if (datosCancion.length == 7) {
+                    if (datosCancion.length == 8) {
                         String nombreArtista = datosCancion[0];
                         String nombreCancion = datosCancion[1];
                         String nombreAlbum = datosCancion[2];
@@ -59,6 +59,7 @@ public class Persistencia {
                         int duracion = Integer.parseInt(datosCancion[4]);
                         String genero = datosCancion[5];
                         String urlCancion = datosCancion[6];
+                        String rutaImagen = datosCancion[7];
 
                         // Obtener el artista correspondiente de tu estructura de datos
                         Artista artista = new Artista();
@@ -74,6 +75,7 @@ public class Persistencia {
                             cancion.setGenero(genero);
                             cancion.setUrlYoutube(urlCancion);
                             cancion.setCodigoArtista(artista.getCodigo());
+                            cancion.setCaratula(rutaImagen);
                             artista.getListaCanciones().insertar(cancion);
                         }
                     }

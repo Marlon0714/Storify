@@ -1,0 +1,5 @@
+#Artistas
+18;Morat;Colombia;true
+#Canciones
+Morat;Punto y Aparte;Balas Perdidas;2018;331;Pop;https://www.youtube.com/watch?v=_26FQfH8994;src/main/java/co/edu/uniquindio/storify/persistencia/Carátulas/BalasPerdidas.jpg
+Morat;Cuando el amor se escapa;Balas Perdidas;2018;256;Pop;https://www.youtube.com/watch?v=kps9vdQr9mE;src/main/java/co/edu/uniquindio/storify/persistencia/Carátulas/BalasPerdidas.jpg

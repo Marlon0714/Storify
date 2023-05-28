@@ -7,6 +7,10 @@ import java.util.NoSuchElementException;
 
 public class ListaCircular<T extends Serializable> implements Serializable, Iterable<T> {
 
+    public boolean isEmpty() {
+        return inicio == null;
+    }
+
     public static class Nodo<T extends Serializable> implements Serializable {
         // Variable en la cual se va a guardar el valor.
         private T valor;
@@ -189,10 +193,6 @@ public class ListaCircular<T extends Serializable> implements Serializable, Iter
         }
     }
 
-    public boolean isEmpty() {
-        return inicio == null;
-    }
-
     @Override
     public Iterator<T> iterator() {
         return new ListaIterator();
@@ -206,6 +206,10 @@ public class ListaCircular<T extends Serializable> implements Serializable, Iter
             nodoActual = inicio;
             fin.setSiguiente(null);
             inicio.setAnterior(null);
+        }
+
+        public boolean isEmpty() {
+            return inicio == null;
         }
 
         @Override

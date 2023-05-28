@@ -74,10 +74,7 @@ public class Usuario implements Serializable {
 
     public void agregarCancion(Cancion cancion) {
         listaCancionesFavoritas.insertar(cancion);
-        Accion accion = new Accion(Accion.Tipo.INSERCION,cancion);
-        if(acciones.isEmpty()){
-
-        }
+        Accion accion = new Accion(Accion.Tipo.INSERCION, cancion);
         acciones.push(accion);
     }
 
@@ -85,7 +82,6 @@ public class Usuario implements Serializable {
         listaCancionesFavoritas.eliminar(cancion);
         Accion accion = new Accion(Accion.Tipo.ELIMINACION,cancion);
         acciones.push(accion);
-
     }
 
     public void ordenarCanciones(Comparator<Cancion> comparador) {

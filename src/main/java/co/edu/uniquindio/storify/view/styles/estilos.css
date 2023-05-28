@@ -232,33 +232,38 @@
     -fx-background-color: white; /* Cambiar el fondo al pasar el ratón por encima */
     -fx-text-fill: black; /* Cambiar el color del texto al pasar el ratón por encima */
 }
-.combobox {
-    -fx-background-color: white;
-    -fx-border-color: white;
-    -fx-border-width: 2px;
-    -fx-border-radius: 5px;
-    -fx-prompt-text-fill: gray;
+.combo-box {
     -fx-font-family: "Arial";
     -fx-font-size: 14px;
-    -fx-text-fill: black;
+    -fx-border-width: 1px;
 }
 
-.combobox .arrow-button {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
+/* Estilo para el ComboBox cuando se despliega */
+.combo-box .list-view {
+    -fx-background-color: #fff; /* Color de fondo blanco */
+    -fx-border-width: 1px;
 }
 
-.combobox .arrow-button .arrow {
-    -fx-shape: "M0.3 0.3 L0.7 0.3 L0.5 0.7 Z";
-    -fx-fill: white;
+/* Estilo para las celdas del ComboBox */
+.combo-box .list-cell {
+    -fx-text-fill: #000; /* Color de texto negro */
 }
 
-.combobox:hover {
-    -fx-border-color: gray;
+/* Estilo para el ComboBox cuando se selecciona un elemento */
+.combo-box .list-cell:selected {
+    -fx-background-color: rgba(255, 255, 255, 0.94); /* Color verde */
 }
 
-.combobox:disabled {
-    -fx-opacity: 0.5;
+/* Estilo para el botón desplegable del ComboBox */
+
+/* Estilo para el borde cuando el ComboBox está enfocado */
+.combo-box:focused {
+    -fx-border-color: #0ce014; /* Color azul */
+    -fx-border-width: 1px;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #1ac52d; /* Color de fondo al pasar el mouse */
 }
 
 .dialog-pane {
