@@ -17,6 +17,8 @@ public class Usuario implements Serializable {
         this.password = password;
         this.email = email;
         this.listaCancionesFavoritas = listaCancionesFavoritas;
+        this.acciones = new Pila<>();
+        this.accionesDesechas = new Pila<>();
     }
 
     public Usuario() {
@@ -72,10 +74,14 @@ public class Usuario implements Serializable {
 
     public void agregarCancion(Cancion cancion) {
         listaCancionesFavoritas.insertar(cancion);
+        Accion accion = new Accion(Accion.Tipo.INSERCION, cancion);
+        acciones.push(accion);
     }
 
     public void eliminarCancion(Cancion cancion) {
         listaCancionesFavoritas.eliminar(cancion);
+        Accion accion = new Accion(Accion.Tipo.ELIMINACION, cancion);
+        acciones.push(accion);
     }
 
     public void ordenarCanciones(Comparator<Cancion> comparador) {

@@ -8,17 +8,17 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.storify.controller.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.storify.controller.registroController">
    <children>
       <Pane prefHeight="406.0" prefWidth="371.0" styleClass="Pane">
          <children>
-            <TextField layoutX="29.0" layoutY="80.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
-            <Button layoutX="81.0" layoutY="321.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Registrarse" />
+            <TextField fx:id="txtCorreo" layoutX="29.0" layoutY="80.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
+            <Button fx:id="btnRegistrarse" layoutX="81.0" layoutY="321.0" mnemonicParsing="false" onAction="#actionRegistrar" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Registrarse" />
             <Label layoutX="29.0" layoutY="115.0" styleClass="label-white" text="Nombre de Usuario" />
             <Label layoutX="29.0" layoutY="165.0" styleClass="label-white" text="Contraseña" />
-            <PasswordField layoutX="29.0" layoutY="191.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
+            <PasswordField fx:id="txtPasswd" layoutX="29.0" layoutY="191.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
             <Label layoutX="104.0" layoutY="14.0" styleClass="label-white" text="Bienvenido" />
-            <TextField layoutX="29.0" layoutY="140.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
+            <TextField fx:id="txtUsername" layoutX="29.0" layoutY="140.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
             <Label layoutX="29.0" layoutY="57.0" styleClass="label-white" text="Correo electrónico" />
          </children>
       </Pane>

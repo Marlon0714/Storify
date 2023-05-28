@@ -1,5 +1,6 @@
 package co.edu.uniquindio.storify.controller;
 
+import co.edu.uniquindio.storify.model.Administrador;
 import co.edu.uniquindio.storify.model.Usuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,7 +37,8 @@ public class LoginController {
 
 
     public void actionLogin(javafx.event.ActionEvent event) throws IOException {
-        if(txtUsername.getText().equals("admin") && pswdField.getText().equals("$aDmiN")){
+        modelFactoryController.iniciarSesion(txtUsername.getText(), pswdField.getText());
+        if(modelFactoryController.getUsuariologgeado() instanceof Administrador){
             mostrarAdminView();
         }else {
             this.modelFactoryController.iniciarSesion(txtUsername.getText(), pswdField.getText());
@@ -44,11 +46,24 @@ public class LoginController {
         }
     }
 
-    public void actionRegistro(ActionEvent event) {
+    public void actionRegistro(ActionEvent event) throws IOException {
+        URL url = new File("src/main/java/co/edu/uniquindio/storify/view/registro.fxml").toURI().toURL();
+        Parent root1 = FXMLLoader.load(url);
+        Scene scene1 = new Scene(root1, 600 , 406);
+        Stage stage1 = new Stage();
+        URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
+        scene1.getStylesheets().add(url1.toExternalForm());
+        stage1.setTitle(txtUsername.getText());
+        stage1.setScene(scene1);
+        stage1.show();
+
+
+        Stage stage = (Stage) btnLogin.getScene().getWindow();
+        stage.close();
     }
 
     void mostrarAdminView() throws IOException {
-        URL url = new File("src/main/java/co/edu/uniquindio/storify/view/gui1.fxml").toURI().toURL();
+        URL url = new File("src/main/java/co/edu/uniquindio/storify/view/gui2.fxml").toURI().toURL();
         Parent root1 = FXMLLoader.load(url);
         Scene scene1 = new Scene(root1, 906 , 694);
         Stage stage1 = new Stage();

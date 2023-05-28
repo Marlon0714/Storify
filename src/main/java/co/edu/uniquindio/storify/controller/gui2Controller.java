@@ -4,6 +4,7 @@ package co.edu.uniquindio.storify.controller;
 import co.edu.uniquindio.storify.model.Artista;
 import co.edu.uniquindio.storify.model.Cancion;
 import co.edu.uniquindio.storify.model.ListaCircular;
+import co.edu.uniquindio.storify.model.ListaDobleEnlazada;
 import com.teamdev.jxbrowser.browser.Browser;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -26,6 +27,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,7 +35,7 @@ import java.util.List;
 
 import static com.teamdev.jxbrowser.engine.RenderingMode.HARDWARE_ACCELERATED;
 
-public class gui1Controller {
+public class gui2Controller {
 
     ObservableList<Cancion> observableList = FXCollections.observableArrayList();
 
@@ -41,9 +43,6 @@ public class gui1Controller {
 
     @FXML // fx:id="brnEliminar"
     private Button brnEliminar; // Value injected by FXMLLoader
-
-    @FXML
-    private Button btnConsultar;
 
     @FXML // fx:id="btnAlbum"
     private Button btnAlbum; // Value injected by FXMLLoader
@@ -57,6 +56,9 @@ public class gui1Controller {
     @FXML // fx:id="btnBuscar"
     private Button btnBuscar; // Value injected by FXMLLoader
 
+    @FXML
+    private Button btnCrear;
+
     @FXML // fx:id="btnCancion"
     private Button btnCancion; // Value injected by FXMLLoader
 
@@ -68,12 +70,6 @@ public class gui1Controller {
 
     @FXML // fx:id="btnReproducir"
     private Button btnReproducir; // Value injected by FXMLLoader
-
-    @FXML
-    private Button btnDeshacer;
-
-    @FXML
-    private Button btnRehacer;
 
     @FXML
     private Label labelAlbum;
@@ -147,7 +143,7 @@ public class gui1Controller {
 
     @FXML
     void actionEliminar(ActionEvent event) {
-        this.modelFactoryController.eliminarFavorita(cancionSeleccion);
+        this.modelFactoryController.eliminarCancion(cancionSeleccion);
         loadTable();
 
     }
@@ -213,18 +209,6 @@ public class gui1Controller {
     }
 
     @FXML
-    void actionDeshacer(ActionEvent event){
-        modelFactoryController.deshacer();
-        loadTable();
-    }
-
-    @FXML
-    void actionRehacer(ActionEvent event){
-        modelFactoryController.rehacer();
-        loadTable();
-    }
-
-    @FXML
     void actionReproducir(ActionEvent event){
         // Initialize Chromium.
         EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED)
@@ -252,36 +236,36 @@ public class gui1Controller {
     }
 
     /***@FXML
-    void actionReproducir(ActionEvent event) {
-        NativeInterface.open();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JFrame frame = new JFrame("YouTube Viewer");
-                frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-                frame.getContentPane().add(getBrowserPanel(cancionSeleccion), BorderLayout.CENTER);
-                frame.setSize(800, 600);
-                frame.setLocationByPlatform(true);
-                frame.setVisible(true);
-            }
-        });
-        NativeInterface.runEventPump();
-        // don't forget to properly close native components
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            //@Override
-            public void run() {
-                NativeInterface.close();
-            }
-        }));
-    }/**/
+     void actionReproducir(ActionEvent event) {
+     NativeInterface.open();
+     SwingUtilities.invokeLater(new Runnable() {
+     public void run() {
+     JFrame frame = new JFrame("YouTube Viewer");
+     frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+     frame.getContentPane().add(getBrowserPanel(cancionSeleccion), BorderLayout.CENTER);
+     frame.setSize(800, 600);
+     frame.setLocationByPlatform(true);
+     frame.setVisible(true);
+     }
+     });
+     NativeInterface.runEventPump();
+     // don't forget to properly close native components
+     Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+     //@Override
+     public void run() {
+     NativeInterface.close();
+     }
+     }));
+     }/**/
 
     /**public static JPanel getBrowserPanel(Cancion cancionSeleccion) {
-        JPanel webBrowserPanel = new JPanel(new BorderLayout());
-        JWebBrowser webBrowser = new JWebBrowser(new chrriis.dj.nativeswing.NSOption[]{});
-        webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
-        webBrowser.setBarsVisible(false);
-        webBrowser.navigate(cancionSeleccion.getUrlYoutube());
-        return webBrowserPanel;
-    }**/
+     JPanel webBrowserPanel = new JPanel(new BorderLayout());
+     JWebBrowser webBrowser = new JWebBrowser(new chrriis.dj.nativeswing.NSOption[]{});
+     webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
+     webBrowser.setBarsVisible(false);
+     webBrowser.navigate(cancionSeleccion.getUrlYoutube());
+     return webBrowserPanel;
+     }**/
 
 
     @FXML
@@ -297,6 +281,7 @@ public class gui1Controller {
 
             // Actualizar la tabla con la lista ordenada
             tableCanciones.setItems(items);
+
 
     }
 
@@ -333,9 +318,9 @@ public class gui1Controller {
 
 
         List<Cancion> tempList = new ArrayList<>();
-        ListaCircular<Cancion> list = modelFactoryController.tomarListaCancionesFavoritas();
+        ListaDobleEnlazada<Cancion> list = modelFactoryController.obtenerCanciones();
 
-        if (!list.isEmpty()){
+        {
             for (Cancion o: list) {
                 tempList.add(o);
 
@@ -349,32 +334,25 @@ public class gui1Controller {
                     mostrarInfo();
                 }
             });
-        }else{
-            observableList.clear();
         }
     }
 
-
     @FXML
-    void actionConsultar(ActionEvent event){
-        String genero = modelFactoryController.generoPopular();
-        Artista artista = modelFactoryController.artistaPopular();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Top");
-            alert.setHeaderText(null);
-            alert.setContentText("El género con más canciones es: "+genero+"\n El artista más popular es: "+artista.getNombre());
+    void actionCrear(ActionEvent event) throws IOException {
+        URL url = new File("src/main/java/co/edu/uniquindio/storify/view/creacion.fxml").toURI().toURL();
+        Parent root1 = FXMLLoader.load(url);
+        Scene scene1 = new Scene(root1, 906 , 694);
+        Stage stage1 = new Stage();
+        URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
+        scene1.getStylesheets().add(url1.toExternalForm());
+        stage1.setTitle("Creación");
+        stage1.setScene(scene1);
+        stage1.show();
 
-            // Aplicar el estilo personalizado al diálogo de éxito
-            URL cssFileURL = getClass().getResource("/co/edu/uniquindio/storify/view/styles/estilos.css");
-            if (cssFileURL != null) {
-                alert.getDialogPane().getStylesheets().add(cssFileURL.toExternalForm());
-                alert.getDialogPane().getStyleClass().add("dialog-pane");
-            }
 
-            alert.showAndWait();
-
+        Stage stage = (Stage) btnCrear.getScene().getWindow();
+        stage.close();
     }
-
 
     private void mostrarInfo() {
         if(cancionSeleccion != null){
@@ -429,5 +407,4 @@ public class gui1Controller {
     }
 
 }
-
 

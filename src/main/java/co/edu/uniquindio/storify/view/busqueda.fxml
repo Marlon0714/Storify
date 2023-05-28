@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="694.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="694.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.storify.controller.busquedaController">
    <children>
       <VBox prefHeight="694.0" prefWidth="906.0">
          <children>
@@ -17,25 +17,27 @@
                <children>
                   <Pane prefHeight="694.0" prefWidth="200.0" styleClass="sidebar">
                      <children>
-                        <Button layoutX="36.0" layoutY="67.0" mnemonicParsing="false" styleClass="sidebar-button" text="Regresar" />
+                        <Button fx:id="btnRegresar" layoutX="36.0" layoutY="67.0" mnemonicParsing="false" onAction="#actionRegresar" styleClass="sidebar-button" text="Regresar" />
+                        <Button fx:id="btnReproducir" layoutX="48.0" layoutY="394.0" mnemonicParsing="false" onAction="#actionReproducir" styleClass="button" text="Reproducir" />
+                        <Button fx:id="btnAgregar" layoutX="48.0" layoutY="437.0" mnemonicParsing="false" onAction="#actionAgregar" styleClass="button" text="Agregar a mi lista" />
                      </children></Pane>
                </children>
             </HBox>
          </children>
       </VBox>
-      <HBox layoutX="248.0" layoutY="49.0" prefHeight="168.0" prefWidth="591.0">
+      <HBox layoutX="248.0" layoutY="49.0" prefHeight="168.0" prefWidth="625.0">
          <children>
-            <Pane prefHeight="17.0" prefWidth="589.0" styleClass="background-pane">
+            <Pane prefHeight="17.0" prefWidth="626.0" styleClass="background-pane">
                <children>
-                  <Button layoutX="73.0" layoutY="129.0" mnemonicParsing="false" styleClass="button" text="Buscar por Artista" />
-                  <Button layoutX="261.0" layoutY="129.0" mnemonicParsing="false" styleClass="button" text="Búsqueda O" />
-                  <Button layoutX="431.0" layoutY="129.0" mnemonicParsing="false" styleClass="button" text="Búsqueda Y" />
-                  <TextField layoutX="14.0" layoutY="23.0" promptText="Artista" styleClass="text-field-alternative" />
-                  <TextField layoutX="14.0" layoutY="59.0" promptText="Canción" styleClass="text-field-alternative" />
-                  <TextField layoutX="220.0" layoutY="23.0" promptText="Álbum" styleClass="text-field-alternative" />
-                  <TextField layoutX="220.0" layoutY="59.0" promptText="Año" styleClass="text-field-alternative" />
-                  <TextField layoutX="406.0" layoutY="23.0" promptText="Género" styleClass="text-field-alternative" />
-                  <TextField layoutX="406.0" layoutY="59.0" promptText="Duración" styleClass="text-field-alternative" />
+                  <Button fx:id="btnArtista" layoutX="73.0" layoutY="129.0" mnemonicParsing="false" onAction="#actionBusquedaArtista" styleClass="button" text="Buscar por Artista" />
+                  <Button fx:id="btnO" layoutX="261.0" layoutY="129.0" mnemonicParsing="false" onAction="#actionBusquedaO" styleClass="button" text="Búsqueda O" />
+                  <Button fx:id="btnY" layoutX="431.0" layoutY="129.0" mnemonicParsing="false" onAction="#actionBusquedaY" styleClass="button" text="Búsqueda Y" />
+                  <TextField fx:id="txtArtista" layoutX="14.0" layoutY="23.0" promptText="Artista" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtCancion" layoutX="14.0" layoutY="72.0" promptText="Canción" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtAlbum" layoutX="220.0" layoutY="23.0" promptText="Álbum" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtAnio" layoutX="220.0" layoutY="72.0" promptText="Año" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtGenero" layoutX="434.0" layoutY="23.0" promptText="Género" styleClass="text-field-alternative" />
+                  <TextField fx:id="txtDuracion" layoutX="434.0" layoutY="72.0" promptText="Duración" styleClass="text-field-alternative" />
                </children>
             </Pane>
          </children>
@@ -44,14 +46,14 @@
          <children>
             <Pane prefHeight="349.0" prefWidth="706.0">
                <children>
-                  <TableView prefHeight="349.0" prefWidth="687.0" styleClass="table-view">
+                  <TableView fx:id="tableCanciones" prefHeight="349.0" prefWidth="687.0" styleClass="table-view">
                     <columns>
-                      <TableColumn prefWidth="136.0" styleClass="column-header" text="Canción" />
-                      <TableColumn minWidth="0.0" prefWidth="119.0" text="Artista" />
-                        <TableColumn minWidth="0.0" prefWidth="119.0" text="Álbum" />
-                        <TableColumn minWidth="0.0" prefWidth="119.0" text="Duración" />
-                        <TableColumn minWidth="0.0" prefWidth="94.0" text="Género" />
-                        <TableColumn minWidth="0.0" prefWidth="98.0" text="Año" />
+                      <TableColumn fx:id="columnCancion" prefWidth="136.0" styleClass="column-header" text="Canción" />
+                      <TableColumn fx:id="columnArtista" minWidth="0.0" prefWidth="119.0" styleClass="column-header" text="Artista" />
+                        <TableColumn fx:id="columnAlbum" minWidth="0.0" prefWidth="119.0" styleClass="column-header" text="Álbum" />
+                        <TableColumn fx:id="columnDuracion" minWidth="0.0" prefWidth="119.0" styleClass="column-header" text="Duración" />
+                        <TableColumn fx:id="columnGenero" minWidth="0.0" prefWidth="94.0" styleClass="column-header" text="Género" />
+                        <TableColumn fx:id="columnAnio" minWidth="0.0" prefWidth="98.0" styleClass="column-header" text="Año" />
                     </columns>
                   </TableView>
                </children>
