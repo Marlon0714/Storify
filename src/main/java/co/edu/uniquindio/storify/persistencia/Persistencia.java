@@ -8,9 +8,8 @@ import java.io.IOException;
 
 public class Persistencia {
     private static final String RUTA_ARCHIVO_TIENDA_MUSICA_XML = "src/main/java/co/edu/uniquindio/storify/persistencia/persistencia.dat";
-    static ArbolBinario<Artista> artistas = new ArbolBinario<>();
 
-    public static ArbolBinario<Artista> cargarArtistas(String archivo) {
+    public static ArbolBinario<Artista> cargarArtistas(String archivo, ArbolBinario<Artista> artistas) {
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
@@ -30,7 +29,7 @@ public class Persistencia {
                         boolean esGrupo = Boolean.parseBoolean(datosArtista[3]);
 
                         // Crear el objeto Artista y almacenarlo en tu estructura de datos
-                        Artista artista = new Artista(codigoArtista, nombreArtista, nacionalidad, esGrupo, null);
+                        Artista artista = new Artista(codigoArtista, nombreArtista, nacionalidad, esGrupo, new ListaDobleEnlazada<>());
                         // Agregar el artista a tu estructura de datos (por ejemplo, un árbol binario)
                         artistas.insertar(artista);
                     }
@@ -42,7 +41,7 @@ public class Persistencia {
         return artistas;
     }
 
-    public static void cargarCanciones(String archivo) {
+    public static ArbolBinario<Artista> cargarCanciones(String archivo, ArbolBinario<Artista> artistas) {
         try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
             boolean seccionCanciones = false;
@@ -68,6 +67,13 @@ public class Persistencia {
                         if (artista != null) {
                             // Crear el objeto Cancion y agregarlo a la lista de canciones del artista
                             Cancion cancion = new Cancion();
+                            cancion.setNombre(nombreCancion);
+                            cancion.setAlbum(nombreAlbum);
+                            cancion.setAnio(anio);
+                            cancion.setDuracion(duracion);
+                            cancion.setGenero(genero);
+                            cancion.setUrlYoutube(urlCancion);
+                            cancion.setCodigoArtista(artista.getCodigo());
                             artista.getListaCanciones().insertar(cancion);
                         }
                     }
@@ -76,6 +82,7 @@ public class Persistencia {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return artistas;
     }
     public static TiendaMusica cargarRecursoBinario() {
         TiendaMusica tiendaMusica = null;

@@ -68,16 +68,23 @@ public class TiendaMusica implements Serializable {
         agregarArtista(nuevoArtista);
     }
     //Crear Cancion
-    public void crearCancion(String codigo, String nombre,String codigoArtista, String album, String caratula, int anio, int duracion, String genero, String urlYoutube) throws ExistingSongException {
+    public void crearCancion(String nombre,String codigoArtista, String album, String caratula, int anio, int duracion, String genero, String urlYoutube) throws ExistingSongException {
         Artista artista = buscarArtista(codigoArtista);
         if(artista == null){
             return;
         }
-        Cancion nuevaCancion = new Cancion(codigo, nombre,codigoArtista,album,caratula,anio,duracion,genero,urlYoutube);
-        if(nuevaCancion.equals(buscarCancion(codigo, codigoArtista))){
-            throw new ExistingSongException("Cancion ya registrada");
+        for (Cancion cancion : artista.getCanciones()){
+            if(cancion.getNombre().equalsIgnoreCase(nombre)){
+                throw new ExistingSongException("Cancion ya registrada");
+            }
         }
+        Cancion nuevaCancion = new Cancion(generarCodigoUnico(), nombre,codigoArtista,album,caratula,anio,duracion,genero,urlYoutube);
         artista.agregarCancion(nuevaCancion);
+    }
+
+    private String generarCodigoUnico() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
     }
 
     public Artista buscarArtista(String codigo){
@@ -146,9 +153,20 @@ public class TiendaMusica implements Serializable {
         // Crear una lista para almacenar las canciones encontradas
         ListaDobleEnlazada<Cancion> cancionesEncontradas = new ListaDobleEnlazada<>();
 
+        // Verificar si la canción coincide con al menos uno de los atributos en el nodo raíz
+        for (Cancion cancion : artistas.getRaiz().getValor().getListaCanciones()) {
+            if (cancion.getNombre().equalsIgnoreCase(cancionABuscar.getNombre())
+                    || cancion.getGenero().equalsIgnoreCase(cancionABuscar.getGenero())
+                    || cancion.getAlbum().equalsIgnoreCase(cancionABuscar.getAlbum())
+                    || cancion.getAnio() == cancionABuscar.getAnio()
+                    || cancion.getCodigoArtista().equalsIgnoreCase(cancionABuscar.getCodigoArtista())) {
+                cancionesEncontradas.insertar(cancion);
+            }
+        }
+
         // Crear dos hilos para buscar en el lado izquierdo y derecho del árbol binario
         Thread hiloIzquierdo = new Thread(() -> {
-            ListaDobleEnlazada<Cancion> cancionesEncontradasIzquierdo = buscarCancionesORHelper(artistas.getRaiz().getIzq(), cancionABuscar,cancionesEncontradas);
+            ListaDobleEnlazada<Cancion> cancionesEncontradasIzquierdo = buscarCancionesORHelper(artistas.getRaiz().getIzq(), cancionABuscar);
             // Procesar las canciones encontradas en el lado izquierdo, si es necesario
             synchronized (cancionesEncontradas) {
                 cancionesEncontradas.addAll(cancionesEncontradasIzquierdo);
@@ -156,7 +174,7 @@ public class TiendaMusica implements Serializable {
         });
 
         Thread hiloDerecho = new Thread(() -> {
-            ListaDobleEnlazada<Cancion> cancionesEncontradasDerecho = buscarCancionesORHelper(artistas.getRaiz().getDer(), cancionABuscar,cancionesEncontradas);
+            ListaDobleEnlazada<Cancion> cancionesEncontradasDerecho = buscarCancionesORHelper(artistas.getRaiz().getDer(), cancionABuscar);
             // Procesar las canciones encontradas en el lado derecho, si es necesario
             synchronized (cancionesEncontradas) {
                 cancionesEncontradas.addAll(cancionesEncontradasDerecho);
@@ -177,23 +195,30 @@ public class TiendaMusica implements Serializable {
         return cancionesEncontradas;
     }
 
-    private ListaDobleEnlazada<Cancion> buscarCancionesORHelper(ArbolBinario.Nodo<Artista> nodo, Cancion cancionABuscar, ListaDobleEnlazada<Cancion> cancionesEncontradas) {
+    private ListaDobleEnlazada<Cancion> buscarCancionesORHelper(ArbolBinario.Nodo<Artista> nodo, Cancion cancionABuscar) {
+        ListaDobleEnlazada<Cancion> cancionesEncontradas = new ListaDobleEnlazada<>();
         if (nodo == null) {
             return cancionesEncontradas;
         }
-
         // Buscar canciones en el artista actual
         for (Cancion cancion : nodo.getValor().getListaCanciones()) {
             // Verificar si la canción coincide con al menos uno de los atributos proporcionados
-            if (cancion.getNombre().equalsIgnoreCase(cancionABuscar.getNombre()) || cancion.getGenero().equalsIgnoreCase(cancionABuscar.getGenero())
-                    || cancion.getAlbum().equalsIgnoreCase(cancionABuscar.getAlbum()) || cancion.getAnio() == (cancionABuscar.getAnio())) {
+            if (cancion.getNombre().equalsIgnoreCase(cancionABuscar.getNombre())
+                    || cancion.getGenero().equalsIgnoreCase(cancionABuscar.getGenero())
+                    || cancion.getAlbum().equalsIgnoreCase(cancionABuscar.getAlbum())
+                    || cancion.getAnio() == cancionABuscar.getAnio()
+                    || cancion.getCodigoArtista().equalsIgnoreCase(cancionABuscar.getCodigoArtista())) {
                 cancionesEncontradas.insertar(cancion);
                 break;
             }
-
         }
-        cancionesEncontradas = buscarCancionesORHelper(nodo.getIzq(), cancionABuscar, cancionesEncontradas);
-        cancionesEncontradas = buscarCancionesORHelper(nodo.getDer(), cancionABuscar, cancionesEncontradas);
+
+        ListaDobleEnlazada<Cancion> cancionesEncontradasIzquierdo = buscarCancionesORHelper(nodo.getIzq(), cancionABuscar);
+        ListaDobleEnlazada<Cancion> cancionesEncontradasDerecho = buscarCancionesORHelper(nodo.getDer(), cancionABuscar);
+
+        cancionesEncontradas.addAll(cancionesEncontradasIzquierdo);
+        cancionesEncontradas.addAll(cancionesEncontradasDerecho);
+
         return cancionesEncontradas;
     }
 
@@ -203,9 +228,27 @@ public class TiendaMusica implements Serializable {
         // Crear una lista para almacenar las canciones encontradas
         ListaDobleEnlazada<Cancion> cancionesEncontradas = new ListaDobleEnlazada<>();
 
+        // Buscar canciones en el artista actual
+        for (Cancion cancion : artistas.getRaiz().getValor().getListaCanciones()) {
+            // Verificar si la canción coincide con los atributos proporcionados
+            boolean coincide = true;
+            boolean nombreNOCoincide = cancionABuscar.getNombre() != null && !cancionABuscar.getNombre().equalsIgnoreCase(cancion.getNombre());
+            boolean generoNOCoincide = cancionABuscar.getGenero() != null && !cancionABuscar.getGenero().equalsIgnoreCase(cancion.getGenero());
+            boolean albumNOCoincide = cancionABuscar.getAlbum() != null && !cancionABuscar.getAlbum().equalsIgnoreCase(cancion.getAlbum());
+            boolean anioNOCoincide = cancionABuscar.getAnio() != -1 && cancionABuscar.getAnio() != cancion.getAnio();
+            boolean artistaNOCoincide = cancionABuscar.getCodigoArtista() != null && !cancionABuscar.getCodigoArtista().equalsIgnoreCase(cancion.getCodigoArtista());
+
+            if (nombreNOCoincide || generoNOCoincide || albumNOCoincide || anioNOCoincide || artistaNOCoincide) {
+                coincide = false;
+            }
+            if(coincide){
+                cancionesEncontradas.insertar(cancion);
+            }
+        }
+
         // Crear dos hilos para buscar en el lado izquierdo y derecho del árbol binario
         Thread hiloIzquierdo = new Thread(() -> {
-            ListaDobleEnlazada<Cancion> cancionesEncontradasIzquierdo = buscarCancionesANDHelper(artistas.getRaiz().getIzq(), cancionABuscar,cancionesEncontradas);
+            ListaDobleEnlazada<Cancion> cancionesEncontradasIzquierdo = buscarCancionesANDHelper(artistas.getRaiz().getIzq(), cancionABuscar);
             // Procesar las canciones encontradas en el lado izquierdo, si es necesario
             synchronized (cancionesEncontradas) {
                 cancionesEncontradas.addAll(cancionesEncontradasIzquierdo);
@@ -213,7 +256,7 @@ public class TiendaMusica implements Serializable {
         });
 
         Thread hiloDerecho = new Thread(() -> {
-            ListaDobleEnlazada<Cancion> cancionesEncontradasDerecho = buscarCancionesANDHelper(artistas.getRaiz().getDer(), cancionABuscar,cancionesEncontradas);
+            ListaDobleEnlazada<Cancion> cancionesEncontradasDerecho = buscarCancionesANDHelper(artistas.getRaiz().getDer(), cancionABuscar);
             // Procesar las canciones encontradas en el lado derecho, si es necesario
             synchronized (cancionesEncontradas) {
                 cancionesEncontradas.addAll(cancionesEncontradasDerecho);
@@ -230,11 +273,11 @@ public class TiendaMusica implements Serializable {
             e.printStackTrace();
             //Thread.currentThread().interrupt();
         }
-
         return cancionesEncontradas;
     }
 
-    private ListaDobleEnlazada<Cancion> buscarCancionesANDHelper(ArbolBinario.Nodo<Artista> nodo, Cancion cancionABuscar, ListaDobleEnlazada<Cancion> cancionesEncontradas) {
+    private ListaDobleEnlazada<Cancion> buscarCancionesANDHelper(ArbolBinario.Nodo<Artista> nodo, Cancion cancionABuscar) {
+        ListaDobleEnlazada<Cancion> cancionesEncontradas = new ListaDobleEnlazada<>();
         if (nodo == null) {
             return cancionesEncontradas;
         }
@@ -247,16 +290,21 @@ public class TiendaMusica implements Serializable {
             boolean generoNOCoincide = cancionABuscar.getGenero() != null && !cancionABuscar.getGenero().equalsIgnoreCase(cancion.getGenero());
             boolean albumNOCoincide = cancionABuscar.getAlbum() != null && !cancionABuscar.getAlbum().equalsIgnoreCase(cancion.getAlbum());
             boolean anioNOCoincide = cancionABuscar.getAnio() != -1 && cancionABuscar.getAnio() != cancion.getAnio();
+            boolean artistaNOCoincide = cancionABuscar.getCodigoArtista() != null && !cancionABuscar.getCodigoArtista().equalsIgnoreCase(cancion.getCodigoArtista());
 
-            if (nombreNOCoincide || generoNOCoincide || albumNOCoincide || anioNOCoincide) {
+            if (nombreNOCoincide || generoNOCoincide || albumNOCoincide || anioNOCoincide || artistaNOCoincide) {
                 coincide = false;
             }
             if(coincide){
                 cancionesEncontradas.insertar(cancion);
             }
         }
-        cancionesEncontradas = buscarCancionesANDHelper(nodo.getIzq(), cancionABuscar, cancionesEncontradas);
-        cancionesEncontradas = buscarCancionesANDHelper(nodo.getDer(), cancionABuscar, cancionesEncontradas);
+        ListaDobleEnlazada<Cancion> cancionesEncontradasIzquierdo = buscarCancionesANDHelper(nodo.getIzq(), cancionABuscar);
+        ListaDobleEnlazada<Cancion> cancionesEncontradasDerecho = buscarCancionesANDHelper(nodo.getDer(), cancionABuscar);
+
+        cancionesEncontradas.addAll(cancionesEncontradasIzquierdo);
+        cancionesEncontradas.addAll(cancionesEncontradasDerecho);
+
         return cancionesEncontradas;
     }
 
@@ -276,6 +324,14 @@ public class TiendaMusica implements Serializable {
             // Si el artista no fue encontrado, devolver una lista vacía
             return new ListaDobleEnlazada<>();
         }
+    }
+
+    public ListaDobleEnlazada<Cancion> obtenerCanciones() {
+        ListaDobleEnlazada<Cancion> canciones = new ListaDobleEnlazada<>();
+        for (Artista artista : artistas) {
+            canciones.addAll(artista.getCanciones());
+        }
+        return canciones;
     }
 
     // Guardar una canción en la lista del usuario
@@ -324,7 +380,6 @@ public class TiendaMusica implements Serializable {
                 generoMasCanciones = genero;
             }
         }
-
         return generoMasCanciones;
     }
 

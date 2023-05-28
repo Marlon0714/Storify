@@ -187,6 +187,7 @@ public class gui1Controller {
         tableCanciones.setItems(items);
     }
 
+
     @FXML
     void actionReproducir(ActionEvent event){
         // Initialize Chromium.
@@ -249,7 +250,17 @@ public class gui1Controller {
 
     @FXML
     void actionOrdenArtista(ActionEvent event) {
+        // Obtener la lista de elementos actualmente mostrados en la tabla
+        ObservableList<Cancion> items = tableCanciones.getItems();
 
+        // Ordenar la lista por el valor de la columna del nombre del artista
+        FXCollections.sort(items, Comparator.comparing(cancion -> {
+            Artista artista = modelFactoryController.obtenerAutor(cancion);
+            return artista != null ? artista.getNombre() : "";
+        }));
+
+        // Actualizar la tabla con la lista ordenada
+        tableCanciones.setItems(items);
     }
 
     Cancion cancionSeleccion;

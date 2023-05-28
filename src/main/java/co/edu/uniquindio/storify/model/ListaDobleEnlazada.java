@@ -150,6 +150,10 @@ public class ListaDobleEnlazada<T extends Serializable> implements Serializable,
         }
     }
 
+    public boolean isEmpty() {
+        return primero == null;
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new ListaIterator();

@@ -188,6 +188,11 @@ public class ListaCircular<T extends Serializable> implements Serializable, Iter
             }
         }
     }
+
+    public boolean isEmpty() {
+        return inicio == null;
+    }
+
     @Override
     public Iterator<T> iterator() {
         return new ListaIterator();

@@ -1,5 +1,6 @@
 package co.edu.uniquindio.storify.controller;
 
+import co.edu.uniquindio.storify.exceptions.ExistingUserException;
 import co.edu.uniquindio.storify.model.*;
 import co.edu.uniquindio.storify.persistencia.Persistencia;
 import javafx.scene.control.Alert;
@@ -7,6 +8,7 @@ import javafx.scene.control.Alert;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Map;
 
 public class ModelFactoryController {
     TiendaMusica tiendaMusica;
@@ -42,7 +44,7 @@ public class ModelFactoryController {
 
     public ModelFactoryController(){
         usuariologgeado = new Usuario();
-        cargarRecursoXML();
+        cargarRecursoBinario();
         if(tiendaMusica == null){
             System.out.println("es null");
             tiendaMusica = new TiendaMusica();
@@ -73,16 +75,47 @@ public class ModelFactoryController {
             for(Artista artist : arb){
                 System.out.println(artist.getNombre());
             }
-            guardarRecursoXML();
+            guardarRecursoBinario();
+        }
+        ListaDobleEnlazada<Cancion> songs = new ListaDobleEnlazada<>();
+        ListaDobleEnlazada<Cancion> list1 = new ListaDobleEnlazada<>();
+        ListaDobleEnlazada<Cancion> list2 = new ListaDobleEnlazada<>();
+        Artista artista = new Artista("1","Red Hot Chilli Papers","Estados Unidos",true,songs);
+        Artista artista1 = new Artista("2","Magic!","Canadá",true,list1);
+        Artista artista2 = new Artista("3","Maroon 5","Estados Unidos",true,list2);
+        Cancion cancionA = new Cancion("1","Otherside","1","Californication","src/main/java/co/edu/uniquindio/storify/persistencia/Carátulas/RedHotChiliPeppersCalifornication.jpg",2014,456,"Rock","https://youtu.be/rn_YodiJO6k");
+        Cancion cancionB = new Cancion("2","Rude","2","Don't Kill the Magic","src/main/java/co/edu/uniquindio/storify/persistencia/Carátulas/DontKillTheMagic.png",2014,345,"Pop","https://youtu.be/PIh2xe4jnpk");
+        Cancion cancionC = new Cancion("3","Animals","3","V","src/main/java/co/edu/uniquindio/storify/persistencia/Carátulas/V.jpg",2015,440,"Rock","https://youtu.be/qpgTC9MDx1o");
+        ListaCircular<Cancion> list = new ListaCircular<>();
+        list1.insertar(cancionB);
+        songs.insertar(cancionA);
+        list2.insertar(cancionC);
+        list.insertar(cancionA);
+        list.insertar(cancionB);
+        list.insertar(cancionC);
+        Usuario b = new Usuario("b","b","b",list);
+        tiendaMusica.agregarUsuario(b);
+        tiendaMusica.eliminarCancion(b,cancionB);
+        tiendaMusica.deshacer(b);
+        tiendaMusica.rehacer(b);
+        tiendaMusica.agregarArtista(artista);
+        tiendaMusica.agregarArtista(artista1);
+        tiendaMusica.agregarArtista(artista2);
+
+        for (Map.Entry<String, Usuario> usuario : tiendaMusica.getUsuarios().entrySet()) {
+            System.out.println(usuario.getValue().getUsername());
+            for(Cancion c : usuario.getValue().getListaCancionesFavoritas()) {
+                System.out.println(c.getNombre());
+            }
         }
 
     }
 
-    private void cargarRecursoXML() {
+    private void cargarRecursoBinario() {
         tiendaMusica = Persistencia.cargarRecursoBinario();
     }
 
-    private void guardarRecursoXML() {
+    private void guardarRecursoBinario() {
         Persistencia.guardarRecursoBinario(tiendaMusica);
     }
     public void iniciarSesion(String username, String password) throws MalformedURLException {
@@ -119,4 +152,11 @@ public class ModelFactoryController {
 
         alert.showAndWait();
     }
+
+    public void cargarArtistasYCancionesDesdeArchivo(String archivo) {
+        // Agregar los artistas y canciones cargados a la TiendaMusica existente
+        ArbolBinario<Artista> artistasCargados = Persistencia.cargarArtistas(archivo, tiendaMusica.getArtistas());
+        tiendaMusica.setArtistas(Persistencia.cargarCanciones(archivo, artistasCargados));
+    }
+
 }
