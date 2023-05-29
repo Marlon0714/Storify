@@ -93,7 +93,7 @@ public class registroController {
         Stage stage = (Stage) btnRegistrarse.getScene().getWindow();
         stage.close();
     }
-    
+
     @FXML
     void actionVolver(ActionEvent event) throws IOException {
         mostrarLogin();

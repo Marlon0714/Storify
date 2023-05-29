@@ -292,7 +292,7 @@ public class creacionController {
         // Aplicar el estilo personalizado al diálogo de error
         URL url = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
         alert.getDialogPane().getStylesheets().add(url.toExternalForm());
-
+        alert.getDialogPane().getStyleClass().add("dialog-pane");
         alert.showAndWait();
     }
 
@@ -309,9 +309,11 @@ public class creacionController {
         alert.setContentText(message);
 
         // Aplicar el estilo personalizado al diálogo de éxito
-        URL url = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
-        alert.getDialogPane().getStylesheets().add(url.toExternalForm());
-
+        URL cssFileURL = getClass().getResource("/co/edu/uniquindio/storify/view/styles/estilos.css");
+        if (cssFileURL != null) {
+            alert.getDialogPane().getStylesheets().add(cssFileURL.toExternalForm());
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
+        }
         alert.showAndWait();
     }
 

@@ -30,10 +30,13 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
          *
          * @param valor el valor del nodo.
          */
-        public Nodo(T valor) {
+        public Nodo(T valor, Nodo<T> izq, Nodo<T> der) {
+            super();
             this.valor = valor;
             this.izq = null;
             this.der = null;
+        }
+        public Nodo(){
         }
 
         /**
@@ -124,7 +127,7 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
      * @param valor el valor a insertar.
      */
     public void insertar(T valor) {
-        Nodo<T> nuevoNodo = new Nodo<>(valor);
+        Nodo<T> nuevoNodo = new Nodo<>(valor, null, null);
         if (raiz == null) {
             raiz = nuevoNodo;
         } else {
@@ -172,16 +175,20 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
             } else if (nodoActual.getDer() == null) {
                 return nodoActual.getIzq();
             } else {
+                // Caso: el nodo tiene dos hijos
                 Nodo<T> sucesor = nodoActual.getIzq();
                 Nodo<T> padreSucesor = nodoActual;
 
+                // Buscamos el nodo más grande en el subárbol izquierdo
                 while (sucesor.getDer() != null) {
                     padreSucesor = sucesor;
                     sucesor = sucesor.getDer();
                 }
 
+                // Reemplazamos el nodo a eliminar por su sucesor
                 nodoActual.setValor(sucesor.getValor());
 
+                // Eliminamos el sucesor del subárbol izquierdo
                 if (padreSucesor == nodoActual) {
                     nodoActual.setIzq(eliminar(nodoActual.getIzq(), sucesor.getValor()));
                 } else {

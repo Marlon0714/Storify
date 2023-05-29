@@ -316,7 +316,26 @@ public class gui1Controller {
         // Apagar Chromium y liberar los recursos asignados
         primaryStage.setOnCloseRequest(event1 -> engine.close());
     }
+    /**
+     * Acción del botón "Ordenar por artista".
+     * Ordena la tabla de canciones por el valor de la columna del nombre del artista.
+     *
+     * @param event El evento de acción.
+     */
+    @FXML
+    void actionOrdenArtista(ActionEvent event) {
+        // Obtener la lista de elementos actualmente mostrados en la tabla
+        ObservableList<Cancion> items = tableCanciones.getItems();
 
+        // Ordenar la lista por el valor de la columna del nombre del artista
+        FXCollections.sort(items, Comparator.comparing(cancion -> {
+            Artista artista = modelFactoryController.obtenerAutor(cancion);
+            return artista != null ? artista.getNombre() : "";
+        }));
+
+        // Actualizar la tabla con la lista ordenada
+        tableCanciones.setItems(items);
+    }
     /**
      * Método que se ejecuta al hacer clic en el botón "Consultar".
      * Muestra información sobre el género con más canciones y el artista más popular.

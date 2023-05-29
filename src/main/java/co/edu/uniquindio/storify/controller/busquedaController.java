@@ -242,7 +242,7 @@ public class busquedaController {
      * @param event El evento de clic en el botón.
      */
     @FXML
-    void actionAgregar(ActionEvent event) {
+    void actionAgregar(ActionEvent event) throws MalformedURLException {
         modelFactoryController.agregarFavorita(cancionSeleccion);
         showSuccessDialog("Canción añadida a la lista con éxito");
     }
@@ -339,6 +339,12 @@ public class busquedaController {
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(message);
+        // Aplicar el estilo personalizado al diálogo de éxito
+        URL cssFileURL = getClass().getResource("/co/edu/uniquindio/storify/view/styles/estilos.css");
+        if (cssFileURL != null) {
+            alert.getDialogPane().getStylesheets().add(cssFileURL.toExternalForm());
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
+        }
         alert.showAndWait();
     }
 
@@ -347,11 +353,15 @@ public class busquedaController {
      *
      * @param message El mensaje de éxito a mostrar.
      */
-    private void showSuccessDialog(String message) {
+    private void showSuccessDialog(String message) throws MalformedURLException {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");
         alert.setHeaderText(null);
         alert.setContentText(message);
+        // Aplicar el estilo personalizado al diálogo de error
+        URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
+        alert.getDialogPane().getStylesheets().add((url1.toExternalForm()));
+        alert.getDialogPane().getStyleClass().add("dialog-pane");
         alert.showAndWait();
     }
 

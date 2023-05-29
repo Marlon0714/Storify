@@ -136,17 +136,6 @@ public class Artista implements Serializable, Comparable<Artista> {
     }
 
     /**
-     * Obtiene la lista de canciones asociadas al artista.
-     *
-     * @return la lista de canciones del artista.
-     * @deprecated Reemplazado por {@link #getListaCanciones()}.
-     */
-    @Deprecated
-    public ListaDobleEnlazada<Cancion> getCanciones() {
-        return listaCanciones;
-    }
-
-    /**
      * Agrega una canción a la lista de canciones del artista.
      *
      * @param cancion la canción a agregar.
@@ -178,6 +167,18 @@ public class Artista implements Serializable, Comparable<Artista> {
                 ", esGrupo=" + esGrupo +
                 ", canciones=" + listaCanciones +
                 '}';
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Artista)) return false;
+        Artista artista = (Artista) o;
+        return esGrupo == artista.esGrupo && Objects.equals(getCodigo(), artista.getCodigo()) && Objects.equals(getNombre(), artista.getNombre()) && Objects.equals(getNacionalidad(), artista.getNacionalidad()) && Objects.equals(listaCanciones, artista.listaCanciones);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCodigo(), getNombre(), getNacionalidad(), esGrupo, listaCanciones);
     }
 
     /**
