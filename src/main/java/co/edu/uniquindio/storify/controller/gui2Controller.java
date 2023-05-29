@@ -53,6 +53,9 @@ public class gui2Controller {
     @FXML // fx:id="btnArtista"
     private Button btnArtista; // Value injected by FXMLLoader
 
+    @FXML
+    private Button btnCargar;
+
     @FXML // fx:id="btnBuscar"
     private Button btnBuscar; // Value injected by FXMLLoader
 
@@ -102,6 +105,9 @@ public class gui2Controller {
 
     @FXML
     private Label imageLabel;
+
+    @FXML
+    private TextField txtRutaArchivo;
 
     @FXML // fx:id="columnAlbum"
     private TableColumn<Cancion, String> columnAlbum; // Value injected by FXMLLoader
@@ -361,6 +367,12 @@ public class gui2Controller {
      * @param event El evento de acción.
      * @throws IOException Si ocurre un error de entrada/salida.
      */
+    @FXML
+    void actionCargar(ActionEvent event){
+        modelFactoryController.cargarArtistasYCancionesDesdeArchivo(txtRutaArchivo.getText());
+        loadTable();
+    }
+
     @FXML
     void actionCrear(ActionEvent event) throws IOException {
         URL url = new File("src/main/java/co/edu/uniquindio/storify/view/creacion.fxml").toURI().toURL();

@@ -139,7 +139,7 @@ public class TiendaMusica implements Serializable {
         }
         Cancion nuevaCancion = new Cancion(generarCodigoUnico(), nombre, codigoArtista, album, caratula, anio, duracion, genero, urlYoutube);
         artista.agregarCancion(nuevaCancion);
-        System.out.println(urlYoutube);
+        //System.out.println(urlYoutube);
     }
 
     /**
@@ -231,6 +231,14 @@ public class TiendaMusica implements Serializable {
         Artista artista = buscarArtista(cancion.getCodigoArtista());
         if (artista == null) {
             return;
+        }
+        for(Usuario usuario : usuarios.values()){
+            ListaCircular<Cancion> listaCancionesFavoritas = usuario.getListaCancionesFavoritas();
+            for (Cancion cancionA:listaCancionesFavoritas) {
+                if(cancionA.getCodigo().equals(cancion.getCodigo())){
+                    usuario.eliminarCancion(cancion);
+                }
+            }
         }
         artista.eliminarCancion(cancion);
     }

@@ -13,13 +13,14 @@
       <Pane prefHeight="406.0" prefWidth="371.0" styleClass="Pane">
          <children>
             <TextField fx:id="txtCorreo" layoutX="29.0" layoutY="80.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
-            <Button fx:id="btnRegistrarse" layoutX="81.0" layoutY="321.0" mnemonicParsing="false" onAction="#actionRegistrar" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Registrarse" />
+            <Button fx:id="btnRegistrarse" layoutX="81.0" layoutY="299.0" mnemonicParsing="false" onAction="#actionRegistrar" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Registrarse" />
             <Label layoutX="29.0" layoutY="115.0" styleClass="label-white" text="Nombre de Usuario" />
             <Label layoutX="29.0" layoutY="165.0" styleClass="label-white" text="Contraseña" />
             <PasswordField fx:id="txtPasswd" layoutX="29.0" layoutY="191.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
             <Label layoutX="104.0" layoutY="14.0" styleClass="label-white" text="Bienvenido" />
             <TextField fx:id="txtUsername" layoutX="29.0" layoutY="140.0" prefHeight="25.0" prefWidth="247.0" styleClass="text-field" />
             <Label layoutX="29.0" layoutY="57.0" styleClass="label-white" text="Correo electrónico" />
+            <Button fx:id="btnVolver" layoutX="81.0" layoutY="353.0" mnemonicParsing="false" onAction="#actionVolver" prefHeight="25.0" prefWidth="132.0" styleClass="button" text="Volver" />
          </children>
       </Pane>
       <Pane layoutX="317.0" prefHeight="406.0" prefWidth="283.0" styleClass="Pane2">

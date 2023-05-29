@@ -73,7 +73,8 @@ public class ModelFactoryController {
                 cancionAux.getGenero(),
                 cancionAux.getUrlYoutube()
         );
-        System.out.println(cancionAux.getUrlYoutube());
+        tiendaMusica.crearCancion(cancionAux.getNombre(),cancionAux.getCodigoArtista(),cancionAux.getAlbum(),cancionAux.getCaratula(),cancionAux.getAnio(),cancionAux.getDuracion(),cancionAux.getGenero(),cancionAux.getUrlYoutube());
+        //System.out.println(cancionAux.getUrlYoutube());
         guardarRecursoBinario();
     }
 
@@ -196,7 +197,7 @@ public class ModelFactoryController {
             }
             guardarRecursoBinario();
         }
-        ListaDobleEnlazada<Cancion> songs = new ListaDobleEnlazada<>();
+        /***ListaDobleEnlazada<Cancion> songs = new ListaDobleEnlazada<>();
         ListaDobleEnlazada<Cancion> list1 = new ListaDobleEnlazada<>();
         ListaDobleEnlazada<Cancion> list2 = new ListaDobleEnlazada<>();
         Artista artista = new Artista("1","Red Hot Chilli Papers","Estados Unidos",true,songs);
@@ -228,7 +229,7 @@ public class ModelFactoryController {
             }
 
         }
-
+***/
     }
 
     /**
