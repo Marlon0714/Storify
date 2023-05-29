@@ -4,45 +4,88 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * La clase ArbolBinario representa un árbol binario de búsqueda.
+ * Permite insertar, eliminar y buscar elementos en el árbol.
+ * También implementa la interfaz Iterable para poder recorrer los elementos del árbol.
+ *
+ * @param <T> el tipo de elementos que se almacenan en el árbol, debe implementar Comparable y Serializable.
+ */
 public class ArbolBinario<T extends Comparable<T> & Serializable> implements Serializable, Iterable<T> {
 
+    /**
+     * La clase Nodo representa un nodo del árbol binario.
+     * Cada nodo contiene un valor, así como referencias a los nodos izquierdo y derecho.
+     *
+     * @param <T> el tipo de elementos que se almacenan en el nodo.
+     */
     public static class Nodo<T extends Comparable<T> & Serializable> implements Serializable {
 
         private T valor;
         private Nodo<T> izq;
         private Nodo<T> der;
 
-        public Nodo(T valor, Nodo<T> izq, Nodo<T> der) {
-            super();
+        /**
+         * Crea un nuevo nodo con el valor especificado y referencias nulas a los nodos izquierdo y derecho.
+         *
+         * @param valor el valor del nodo.
+         */
+        public Nodo(T valor) {
             this.valor = valor;
-            this.izq = izq;
-            this.der = der;
+            this.izq = null;
+            this.der = null;
         }
 
-        public Nodo(){
-
-        }
-
+        /**
+         * Obtiene el valor almacenado en el nodo.
+         *
+         * @return el valor del nodo.
+         */
         public T getValor() {
             return valor;
         }
 
+        /**
+         * Establece el valor del nodo.
+         *
+         * @param valor el nuevo valor del nodo.
+         */
         public void setValor(T valor) {
             this.valor = valor;
         }
 
+        /**
+         * Obtiene el nodo izquierdo.
+         *
+         * @return el nodo izquierdo.
+         */
         public Nodo<T> getIzq() {
             return izq;
         }
 
+        /**
+         * Establece el nodo izquierdo.
+         *
+         * @param izq el nuevo nodo izquierdo.
+         */
         public void setIzq(Nodo<T> izq) {
             this.izq = izq;
         }
 
+        /**
+         * Obtiene el nodo derecho.
+         *
+         * @return el nodo derecho.
+         */
         public Nodo<T> getDer() {
             return der;
         }
 
+        /**
+         * Establece el nodo derecho.
+         *
+         * @param der el nuevo nodo derecho.
+         */
         public void setDer(Nodo<T> der) {
             this.der = der;
         }
@@ -50,26 +93,42 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
 
     private Nodo<T> raiz;
 
+    /**
+     * Crea un nuevo árbol binario vacío.
+     */
     public ArbolBinario() {
         this.raiz = null;
     }
 
+    /**
+     * Obtiene la raíz del árbol.
+     *
+     * @return la raíz del árbol.
+     */
     public Nodo<T> getRaiz() {
         return raiz;
     }
 
+    /**
+     * Establece la raíz del árbol.
+     *
+     * @param raiz la nueva raíz del árbol.
+     */
     public void setRaiz(Nodo<T> raiz) {
         this.raiz = raiz;
     }
 
+    /**
+     * Inserta un nuevo valor en el árbol.
+     *
+     * @param valor el valor a insertar.
+     */
     public void insertar(T valor) {
-        Nodo<T> nuevoNodo = new Nodo<>(valor, null, null);
+        Nodo<T> nuevoNodo = new Nodo<>(valor);
         if (raiz == null) {
             raiz = nuevoNodo;
-
         } else {
             insertar(raiz, nuevoNodo);
-
         }
     }
 
@@ -79,20 +138,21 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
                 nodoActual.setIzq(nuevoNodo);
             } else {
                 insertar(nodoActual.getIzq(), nuevoNodo);
-
             }
         } else {
             if (nodoActual.getDer() == null) {
                 nodoActual.setDer(nuevoNodo);
-
             } else {
-
                 insertar(nodoActual.getDer(), nuevoNodo);
-
             }
         }
     }
 
+    /**
+     * Elimina un valor del árbol.
+     *
+     * @param valor el valor a eliminar.
+     */
     public void eliminar(T valor) {
         raiz = eliminar(raiz, valor);
     }
@@ -112,20 +172,16 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
             } else if (nodoActual.getDer() == null) {
                 return nodoActual.getIzq();
             } else {
-                // Caso: el nodo tiene dos hijos
                 Nodo<T> sucesor = nodoActual.getIzq();
                 Nodo<T> padreSucesor = nodoActual;
 
-                // Buscamos el nodo más grande en el subárbol izquierdo
                 while (sucesor.getDer() != null) {
                     padreSucesor = sucesor;
                     sucesor = sucesor.getDer();
                 }
 
-                // Reemplazamos el nodo a eliminar por su sucesor
                 nodoActual.setValor(sucesor.getValor());
 
-                // Eliminamos el sucesor del subárbol izquierdo
                 if (padreSucesor == nodoActual) {
                     nodoActual.setIzq(eliminar(nodoActual.getIzq(), sucesor.getValor()));
                 } else {
@@ -136,28 +192,34 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
         return nodoActual;
     }
 
+    /**
+     * Busca un valor en el árbol.
+     *
+     * @param valor el valor a buscar.
+     * @return el valor encontrado, o null si no se encuentra.
+     */
     public T buscar(T valor) {
         Nodo<T> nodo = buscar(raiz, valor);
-        if (nodo == null){
+        if (nodo == null) {
             return null;
-        }else{
-            return  nodo.getValor();
+        } else {
+            return nodo.getValor();
         }
     }
 
     private Nodo<T> buscar(Nodo<T> nodoActual, T valor) {
         if (nodoActual == null) {
-            return null; // valor no encontrado
+            return null;
         }
 
         int comparacion = valor.compareTo(nodoActual.getValor());
 
         if (comparacion == 0) {
-            return nodoActual; // valor encontrado
+            return nodoActual;
         } else if (comparacion < 0) {
-            return buscar(nodoActual.getIzq(), valor); // buscar en el subárbol izquierdo
+            return buscar(nodoActual.getIzq(), valor);
         } else {
-            return buscar(nodoActual.getDer(), valor); // buscar en el subárbol derecho
+            return buscar(nodoActual.getDer(), valor);
         }
     }
 
@@ -165,6 +227,7 @@ public class ArbolBinario<T extends Comparable<T> & Serializable> implements Ser
     public Iterator<T> iterator() {
         return new ArbolIterator();
     }
+
     private class ArbolIterator implements Iterator<T> {
         private final Pila<Nodo<T>> pila;
 

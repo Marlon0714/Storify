@@ -4,19 +4,36 @@ import co.edu.uniquindio.storify.exceptions.*;
 import java.io.Serializable;
 import java.util.*;
 
-
+/**
+ * Clase que representa una tienda de música.
+ */
 public class TiendaMusica implements Serializable {
     private HashMap<String,Usuario> usuarios;
     private ArbolBinario<Artista> artistas;
+
+    /**
+     * Constructor de la clase TiendaMusica.
+     * Crea una nueva instancia de TiendaMusica inicializando los atributos usuarios y artistas.
+     */
     public TiendaMusica() {
         this.usuarios = new HashMap<>();
         this.artistas = new ArbolBinario<>();
     }
 
+    /**
+     * Obtiene el mapa de usuarios de la tienda.
+     *
+     * @return El mapa de usuarios de la tienda.
+     */
     public Map<String, Usuario> getUsuarios() {
         return usuarios;
     }
 
+    /**
+     * Establece el mapa de usuarios de la tienda.
+     *
+     * @param usuarios El mapa de usuarios a establecer.
+     */
     public void setUsuarios(Map<String, Usuario> usuarios) {
         if (usuarios instanceof HashMap) {
             this.usuarios = (HashMap<String, Usuario>) usuarios;
@@ -25,30 +42,50 @@ public class TiendaMusica implements Serializable {
         }
     }
 
+    /**
+     * Obtiene el árbol binario de artistas de la tienda.
+     *
+     * @return El árbol binario de artistas de la tienda.
+     */
     public ArbolBinario<Artista> getArtistas() {
         return artistas;
     }
 
+    /**
+     * Establece el árbol binario de artistas de la tienda.
+     *
+     * @param artistas El árbol binario de artistas a establecer.
+     */
     public void setArtistas(ArbolBinario<Artista> artistas) {
         this.artistas = artistas;
     }
 
-    // Iniciar sesión
+    /**
+     * Método para iniciar sesión en la tienda.
+     *
+     * @param username El nombre de usuario del usuario que desea iniciar sesión.
+     * @param password La contraseña del usuario que desea iniciar sesión.
+     * @return El objeto Usuario si la autenticación es exitosa, o null si no es exitosa.
+     */
     public Usuario iniciarSesion(String username, String password) {
-        // Buscar el usuario por nombre de usuario
         Usuario usuario = usuarios.get(username);
 
-        // Verificar si el usuario existe y si la contraseña es correcta
         if (usuario != null && usuario.getPassword().equals(password)) {
-            // Devolver el usuario si la autenticación es exitosa
             return usuario;
         }
 
-        // Devolver null si el usuario no existe o si la autenticación falla
         return null;
     }
 
-    //Crear Usuario
+    /**
+     * Método para crear un nuevo usuario en la tienda.
+     *
+     * @param username              El nombre de usuario del nuevo usuario.
+     * @param password              La contraseña del nuevo usuario.
+     * @param email                 El correo electrónico del nuevo usuario.
+     * @param listaCancionesFavoritas La lista de canciones favoritas del nuevo usuario.
+     * @throws ExistingUserException Si el nombre de usuario ya está registrado.
+     */
     public void crearUsuario(String username, String password, String email, ListaCircular<Cancion> listaCancionesFavoritas) throws ExistingUserException {
         for (Map.Entry<String, Usuario> usuario : usuarios.entrySet()) {
             String clave = usuario.getKey();
@@ -59,35 +96,68 @@ public class TiendaMusica implements Serializable {
         Usuario nuevoUsuario = new Usuario(username, password,email,listaCancionesFavoritas);
         agregarUsuario(nuevoUsuario);
     }
-    //Crear Artista
+    /**
+     * Crea un nuevo artista y lo agrega al gestor de música.
+     *
+     * @param codigo         el código del artista
+     * @param nombre         el nombre del artista
+     * @param nacionalidad   la nacionalidad del artista
+     * @param esGrupo        indica si el artista es un grupo musical
+     * @param listaCanciones la lista de canciones del artista
+     * @throws ExistingArtistException si el artista ya está registrado
+     */
     public void crearArtista(String codigo, String nombre, String nacionalidad, boolean esGrupo, ListaDobleEnlazada<Cancion> listaCanciones) throws ExistingArtistException {
-        Artista nuevoArtista = new Artista(codigo, nombre,nacionalidad,esGrupo,listaCanciones);
-        if(nuevoArtista.equals(artistas.buscar(nuevoArtista))){
+        Artista nuevoArtista = new Artista(codigo, nombre, nacionalidad, esGrupo, listaCanciones);
+        if (nuevoArtista.equals(artistas.buscar(nuevoArtista))) {
             throw new ExistingArtistException("Artista ya registrado");
         }
         agregarArtista(nuevoArtista);
     }
-    //Crear Cancion
-    public void crearCancion(String nombre,String codigoArtista, String album, String caratula, int anio, int duracion, String genero, String urlYoutube) throws ExistingSongException {
+
+    /**
+     * Crea una nueva canción y la agrega al gestor de música.
+     *
+     * @param nombre      el nombre de la canción
+     * @param codigoArtista el código del artista al que pertenece la canción
+     * @param album       el álbum al que pertenece la canción
+     * @param caratula    la carátula de la canción
+     * @param anio        el año de lanzamiento de la canción
+     * @param duracion    la duración de la canción en segundos
+     * @param genero      el género de la canción
+     * @param urlYoutube  la URL de YouTube de la canción
+     * @throws ExistingSongException si la canción ya está registrada
+     */
+    public void crearCancion(String nombre, String codigoArtista, String album, String caratula, int anio, int duracion, String genero, String urlYoutube) throws ExistingSongException {
         Artista artista = buscarArtista(codigoArtista);
-        if(artista == null){
+        if (artista == null) {
             return;
         }
         for (Cancion cancion : artista.getCanciones()) {
-            if(cancion.getNombre().equals(nombre)){
+            if (cancion.getNombre().equals(nombre)) {
                 throw new ExistingSongException("Cancion ya registrada");
             }
         }
-        Cancion nuevaCancion = new Cancion(generarCodigoUnico(),nombre,codigoArtista,album,caratula,anio,duracion,genero,urlYoutube);
+        Cancion nuevaCancion = new Cancion(generarCodigoUnico(), nombre, codigoArtista, album, caratula, anio, duracion, genero, urlYoutube);
         artista.agregarCancion(nuevaCancion);
         System.out.println(urlYoutube);
     }
 
+    /**
+     * Genera un código único para identificar una canción.
+     *
+     * @return el código único generado
+     */
     private String generarCodigoUnico() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
     }
 
+    /**
+     * Busca un artista por su código.
+     *
+     * @param codigo el código del artista a buscar
+     * @return el artista encontrado o null si no se encuentra
+     */
     public Artista buscarArtista(String codigo){
         for(Artista artista : artistas){
             if(codigo.equals(artista.getCodigo())){
@@ -97,9 +167,15 @@ public class TiendaMusica implements Serializable {
         return null;
     }
 
+    /**
+     * Busca una canción por su código.
+     *
+     * @param codigo el código de la canción a buscar
+     * @return la canción encontrada o null si no se encuentra
+     */
     public Cancion buscarCancion(String codigo) {
         for(Artista artista : artistas){
-            for(Cancion cancion: artista.getCanciones()){
+            for(Cancion cancion: artista.getListaCanciones()){
                 if(cancion.getCodigo().equals(codigo)){
                     return cancion;
                 }
@@ -108,6 +184,13 @@ public class TiendaMusica implements Serializable {
         return null;
     }
 
+    /**
+     * Busca una canción por su código y el código del artista.
+     *
+     * @param codigo el código de la canción a buscar
+     * @param codigoArtista el código del artista a buscar
+     * @return la canción encontrada o null si no se encuentra
+     */
     private Cancion buscarCancion(String codigo, String codigoArtista) {
         Artista artista = buscarArtista(codigoArtista);
         if(artista == null){
@@ -121,15 +204,29 @@ public class TiendaMusica implements Serializable {
         return null;
     }
 
-    //Eliminar Usuario
+    /**
+     * Elimina un usuario de la lista de usuarios.
+     *
+     * @param usuario el usuario a eliminar
+     */
     public void eliminarUsuario(Usuario usuario) {
         usuarios.remove(usuario.getUsername());
     }
-    //Eliminar Artista
+
+    /**
+     * Elimina un artista de la lista de artistas.
+     *
+     * @param artista el artista a eliminar
+     */
     public void eliminarArtista(Artista artista) {
         artistas.eliminar(artista);
     }
-    //Eliminar Cancion
+
+    /**
+     * Elimina una canción de la lista de canciones de un artista.
+     *
+     * @param cancion la canción a eliminar
+     */
     public void eliminarCancion(Cancion cancion) {
         Artista artista = buscarArtista(cancion.getCodigoArtista());
         if (artista == null) {
@@ -138,18 +235,29 @@ public class TiendaMusica implements Serializable {
         artista.eliminarCancion(cancion);
     }
 
-    // Agregar usuario
+    /**
+     * Agrega un usuario a la lista de usuarios.
+     *
+     * @param usuario el usuario a agregar
+     */
     public void agregarUsuario(Usuario usuario) {
         usuarios.put(usuario.getUsername(), usuario);
     }
 
-    // Agregar artista
+    /**
+     * Agrega un artista a la lista de artistas.
+     *
+     * @param artista el artista a agregar
+     */
     public void agregarArtista(Artista artista) {
         artistas.insertar(artista);
     }
-
-    // Buscar canciones que coinciden con al menos uno de los atributos proporcionados
-
+    /**
+     * Busca canciones que coinciden con al menos uno de los atributos proporcionados.
+     *
+     * @param cancionABuscar la canción con los atributos a buscar
+     * @return una lista de canciones que coinciden con al menos uno de los atributos proporcionados
+     */
     public ListaDobleEnlazada<Cancion> buscarCancionesOR(Cancion cancionABuscar) {
         // Implementación de búsqueda de canciones
         // Crear una lista para almacenar las canciones encontradas
@@ -198,11 +306,22 @@ public class TiendaMusica implements Serializable {
         return cancionesEncontradas;
     }
 
+    /**
+     * Método recursivo auxiliar utilizado para buscar canciones en un árbol binario de artistas
+     * que cumplan con al menos uno de los atributos proporcionados.
+     *
+     * @param nodo            El nodo actual del árbol binario.
+     * @param cancionABuscar  La canción que se desea buscar.
+     * @return Una lista doblemente enlazada que contiene las canciones encontradas.
+     */
     private ListaDobleEnlazada<Cancion> buscarCancionesORHelper(ArbolBinario.Nodo<Artista> nodo, Cancion cancionABuscar) {
         ListaDobleEnlazada<Cancion> cancionesEncontradas = new ListaDobleEnlazada<>();
+
+        // Caso base: el nodo es nulo, no hay más elementos para buscar
         if (nodo == null) {
             return cancionesEncontradas;
         }
+
         // Buscar canciones en el artista actual
         for (Cancion cancion : nodo.getValor().getListaCanciones()) {
             // Verificar si la canción coincide con al menos uno de los atributos proporcionados
@@ -216,15 +335,24 @@ public class TiendaMusica implements Serializable {
             }
         }
 
+        // Realizar la búsqueda en el subárbol izquierdo
         ListaDobleEnlazada<Cancion> cancionesEncontradasIzquierdo = buscarCancionesORHelper(nodo.getIzq(), cancionABuscar);
+        // Realizar la búsqueda en el subárbol derecho
         ListaDobleEnlazada<Cancion> cancionesEncontradasDerecho = buscarCancionesORHelper(nodo.getDer(), cancionABuscar);
 
+        // Agregar las canciones encontradas en ambos subárboles a la lista final
         cancionesEncontradas.addAll(cancionesEncontradasIzquierdo);
         cancionesEncontradas.addAll(cancionesEncontradasDerecho);
 
         return cancionesEncontradas;
     }
 
+    /**
+     * Busca canciones que coincidan con los atributos proporcionados utilizando una operación lógica AND.
+     *
+     * @param cancionABuscar La canción con los atributos a buscar.
+     * @return Una lista doblemente enlazada que contiene las canciones encontradas.
+     */
     public ListaDobleEnlazada<Cancion> buscarCancionesAND(Cancion cancionABuscar) {
         // Implementación de búsqueda de canciones
         // Crear una lista para almacenar las canciones encontradas
@@ -243,7 +371,7 @@ public class TiendaMusica implements Serializable {
             if (nombreNOCoincide || generoNOCoincide || albumNOCoincide || anioNOCoincide || artistaNOCoincide) {
                 coincide = false;
             }
-            if(coincide){
+            if (coincide) {
                 cancionesEncontradas.insertar(cancion);
             }
         }
@@ -278,6 +406,13 @@ public class TiendaMusica implements Serializable {
         return cancionesEncontradas;
     }
 
+    /**
+     * Método auxiliar utilizado por el método buscarCancionesAND para buscar canciones en un subárbol.
+     *
+     * @param nodo            El nodo raíz del subárbol.
+     * @param cancionABuscar  La canción con los atributos a buscar.
+     * @return Una lista doblemente enlazada que contiene las canciones encontradas en el subárbol.
+     */
     private ListaDobleEnlazada<Cancion> buscarCancionesANDHelper(ArbolBinario.Nodo<Artista> nodo, Cancion cancionABuscar) {
         ListaDobleEnlazada<Cancion> cancionesEncontradas = new ListaDobleEnlazada<>();
         if (nodo == null) {
@@ -297,7 +432,7 @@ public class TiendaMusica implements Serializable {
             if (nombreNOCoincide || generoNOCoincide || albumNOCoincide || anioNOCoincide || artistaNOCoincide) {
                 coincide = false;
             }
-            if(coincide){
+            if (coincide) {
                 cancionesEncontradas.insertar(cancion);
             }
         }
@@ -310,7 +445,14 @@ public class TiendaMusica implements Serializable {
         return cancionesEncontradas;
     }
 
-    // Buscar canciones de un artista
+
+    /**
+     * Método para buscar canciones de un artista.
+     *
+     * @param nombreArtista El nombre del artista cuyas canciones se desean buscar.
+     * @return Una lista doblemente enlazada de tipo Cancion que contiene las canciones del artista,
+     *         o una lista vacía si el artista no fue encontrado.
+     */
     public ListaDobleEnlazada<Cancion> buscarCancionesArtista(String nombreArtista) {
         // Implementación de búsqueda de canciones
         // Buscar el artista por nombre en el árbol binario
@@ -328,28 +470,59 @@ public class TiendaMusica implements Serializable {
         }
     }
 
-    // Guardar una canción en la lista del usuario
+    /**
+     * Método para guardar una canción en la lista del usuario.
+     *
+     * @param usuario  El usuario al que se le desea guardar la canción.
+     * @param cancion  La canción que se desea guardar.
+     */
     public void guardarCancion(Usuario usuario, Cancion cancion) {
         usuario.agregarCancion(cancion);
     }
 
-    // Eliminar una canción de la lista del usuario
+    /**
+     * Método para eliminar una canción de la lista del usuario.
+     *
+     * @param usuario El usuario al que se le desea eliminar la canción.
+     * @param cancion La canción que se desea eliminar.
+     */
     public void eliminarCancion(Usuario usuario, Cancion cancion) {
         usuario.eliminarCancion(cancion);
     }
 
-    public void deshacer(Usuario usuario) {usuario.deshacer();}
+    /**
+     * Método para deshacer la última acción realizada por el usuario.
+     *
+     * @param usuario El usuario que desea deshacer la acción.
+     */
+    public void deshacer(Usuario usuario) {
+        usuario.deshacer();
+    }
 
+    /**
+     * Método para rehacer la última acción deshecha por el usuario.
+     *
+     * @param usuario El usuario que desea rehacer la acción.
+     */
     public void rehacer(Usuario usuario) {
         usuario.rehacer();
     }
 
-    // Ordenar la lista de canciones de un usuario por cualquier atributo de la canción
+    /**
+     * Método para ordenar la lista de canciones de un usuario por cualquier atributo de la canción.
+     *
+     * @param usuario    El usuario cuya lista de canciones se desea ordenar.
+     * @param comparador El comparador utilizado para ordenar las canciones.
+     */
     public void ordenarCanciones(Usuario usuario, Comparator<Cancion> comparador) {
         usuario.ordenarCanciones(comparador);
     }
 
-    // Consultar el género con más canciones en la Tienda
+    /**
+     * Método para consultar el género con más canciones en la Tienda.
+     *
+     * @return El género con más canciones en la Tienda.
+     */
     public String consultarGeneroMasCanciones() {
         Map<String, Integer> generoCount = new HashMap<>();
 
@@ -378,6 +551,11 @@ public class TiendaMusica implements Serializable {
         return generoMasCanciones;
     }
 
+    /**
+     * Método para obtener el artista más popular en la Tienda.
+     *
+     * @return El artista más popular en la Tienda.
+     */
     public Artista obtenerArtistaMasPopular() {
         Map<Artista, Integer> contadorArtistas = new HashMap<>();
 
@@ -385,12 +563,12 @@ public class TiendaMusica implements Serializable {
         for (Usuario usuario : usuarios.values()) {
             // Obtener la lista de canciones favoritas del usuario
             ListaCircular<Cancion> listaCancionesFavoritas = usuario.getListaCancionesFavoritas();
-            //System.out.println(usuario.getUsername());
+
             // Recorrer la lista de canciones favoritas del usuario
             for (Cancion cancion : listaCancionesFavoritas) {
                 // Obtener el artista de la canción
                 Artista artista = buscarArtista(cancion.getCodigoArtista());
-                //System.out.println(artista.getNombre());
+
                 // Incrementar el contador del artista
                 contadorArtistas.put(artista, contadorArtistas.getOrDefault(artista, 0) + 1);
             }
@@ -407,18 +585,23 @@ public class TiendaMusica implements Serializable {
             if (contador > maxContador) {
                 maxContador = contador;
                 artistaMasPopular = artista;
-                System.out.println(artista+" "+contador);
+                System.out.println(artista + " " + contador);
             }
         }
 
         return artistaMasPopular;
     }
+
+    /**
+     * Método para obtener todas las canciones de la Tienda.
+     *
+     * @return Una lista doblemente enlazada de tipo Cancion que contiene todas las canciones de la Tienda.
+     */
     public ListaDobleEnlazada<Cancion> obtenerCanciones() {
         ListaDobleEnlazada<Cancion> canciones = new ListaDobleEnlazada<>();
         for (Artista artista : artistas) {
-            canciones.addAll(artista.getCanciones());
+            canciones.addAll(artista.getListaCanciones());
         }
         return canciones;
     }
-
 }

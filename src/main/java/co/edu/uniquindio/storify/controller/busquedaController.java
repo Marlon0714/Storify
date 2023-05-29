@@ -99,21 +99,31 @@ public class busquedaController {
     private TextField txtGenero; // Value injected by FXMLLoader
 
 
+    /**
+     * Método para manejar el evento de búsqueda por artista.
+     *
+     * @param event El evento de clic en el botón.
+     * @throws MalformedURLException Si ocurre un error al cargar una URL.
+     */
     @FXML
     void actionBusquedaArtista(ActionEvent event) throws MalformedURLException {
-        if(!txtArtista.getText().isEmpty()){
+        if (!txtArtista.getText().isEmpty()) {
             ListaDobleEnlazada<Cancion> listaDobleEnlazada = new ListaDobleEnlazada<>();
             listaDobleEnlazada.addAll(modelFactoryController.buscarCancionesArtista(txtArtista.getText()));
             loadNewTable(listaDobleEnlazada);
-        }else{
+        } else {
             showErrorDialog("Debe ingresar el nombre del artista");
         }
     }
 
-
+    /**
+     * Método para manejar el evento de búsqueda mediante el operador OR.
+     *
+     * @param event El evento de clic en el botón.
+     * @throws MalformedURLException Si ocurre un error al cargar una URL.
+     */
     @FXML
     void actionBusquedaO(ActionEvent event) throws MalformedURLException {
-
         Cancion cancionAux = new Cancion();
         cancionAux.setNombre(txtCancion.getText());
         cancionAux.setAlbum(txtAlbum.getText());
@@ -146,10 +156,15 @@ public class busquedaController {
         }
     }
 
+    /**
+     * Método para manejar el evento de búsqueda mediante el operador AND.
+     *
+     * @param event El evento de clic en el botón.
+     * @throws MalformedURLException Si ocurre un error al cargar una URL.
+     */
     @FXML
     void actionBusquedaY(ActionEvent event) throws MalformedURLException {
-
-        if(validarFields()) {
+        if (validarFields()) {
             Cancion cancionAux = new Cancion();
             cancionAux.setNombre(txtCancion.getText());
             cancionAux.setAlbum(txtAlbum.getText());
@@ -161,63 +176,89 @@ public class busquedaController {
             ListaDobleEnlazada<Cancion> listaDobleEnlazada = new ListaDobleEnlazada<>();
             listaDobleEnlazada.addAll(modelFactoryController.buscarCancionAND(cancionAux));
             loadNewTable(listaDobleEnlazada);
-        }else {
+        } else {
             showErrorDialog("Debe llenar todos los campos");
         }
     }
 
+    /**
+     * Método para manejar el evento de regresar.
+     *
+     * @param event El evento de clic en el botón.
+     * @throws IOException Si ocurre un error de entrada o salida.
+     */
     @FXML
     void actionRegresar(ActionEvent event) throws IOException {
         modelFactoryController.regresarGui(btnRegresar);
     }
 
+    /**
+     * Método para manejar el evento de reproducir una canción.
+     *
+     * @param event El evento de clic en el botón.
+     */
     @FXML
     void actionReproducir(ActionEvent event) {
-            // Initialize Chromium.
-            EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED)
-                    .licenseKey("1BNDHFSC1G6ACMC4FPYDA9JCGE2ON6O8O1TLU39NUKF2TT6JPNM2U3U13827LFGQ5LROE8")
-                    .build();
-            Engine engine = Engine.newInstance(options);
+        // Inicializar Chromium.
+        EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED)
+                .licenseKey("1BNDHFSC1G6ACMC4FPYDA9JCGE2ON6O8O1TLU39NUKF2TT6JPNM2U3U13827LFGQ5LROE8")
+                .build();
+        Engine engine = Engine.newInstance(options);
 
-// Create a Browser instance.
-            Browser browser = engine.newBrowser();
+        // Crear una instancia de Browser.
+        Browser browser = engine.newBrowser();
 
-// Load the required web page.
-            browser.navigation().loadUrl(cancionSeleccion.getUrlYoutube());
+        // Cargar la página web requerida.
+        browser.navigation().loadUrl(cancionSeleccion.getUrlYoutube());
 
-// Create and embed JavaFX BrowserView component to display web content.
-            BrowserView view = BrowserView.newInstance(browser);
+        // Crear y embeber el componente JavaFX BrowserView para mostrar el contenido web.
+        BrowserView view = BrowserView.newInstance(browser);
 
-            Scene scene = new Scene(new BorderPane(view), 600, 406);
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle(cancionSeleccion.getNombre());
-            primaryStage.setScene(scene);
-            primaryStage.show();
+        Scene scene = new Scene(new BorderPane(view), 600, 406);
+        Stage primaryStage = new Stage();
+        primaryStage.setTitle(cancionSeleccion.getNombre());
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-// Shutdown Chromium and release allocated resources.
-            primaryStage.setOnCloseRequest(event1 -> engine.close());
-        }
+        // Apagar Chromium y liberar los recursos asignados.
+        primaryStage.setOnCloseRequest(event1 -> engine.close());
+    }
 
-
+    /**
+     * Método para convertir la duración de una canción en un formato legible.
+     *
+     * @param numero El número de duración de la canción.
+     * @return La duración de la canción en formato minutos:segundos.
+     */
     public String convertirDuracion(int numero) {
         int segundos = numero % 100;
         int minutos = numero / 100;
         return minutos + ":" + segundos;
     }
 
+    /**
+     * Método para manejar el evento de agregar una canción a la lista de favoritas.
+     *
+     * @param event El evento de clic en el botón.
+     */
     @FXML
     void actionAgregar(ActionEvent event) {
         modelFactoryController.agregarFavorita(cancionSeleccion);
         showSuccessDialog("Canción añadida a la lista con éxito");
     }
 
-    private void loadNewTable(ListaDobleEnlazada<Cancion> list){
+    /**
+     * Método para cargar una nueva tabla de canciones.
+     *
+     * @param list La lista de canciones a cargar.
+     */
+    private void loadNewTable(ListaDobleEnlazada<Cancion> list) {
         columnCancion.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         columnArtista.setCellValueFactory(cellData -> {
             Artista artista = modelFactoryController.obtenerAutor(cellData.getValue());
             if (artista != null) {
                 return new SimpleStringProperty(artista.getNombre());
-            }else{
+            } else {
                 return new SimpleStringProperty("");
             }
         });
@@ -239,13 +280,12 @@ public class busquedaController {
             };
         });
 
-
         List<Cancion> tempList = new ArrayList<>();
 
-        for (Cancion o: list) {
+        for (Cancion o : list) {
             tempList.add(o);
-
         }
+
         observableList.clear();
         observableList.addAll(tempList);
         tableCanciones.setItems(observableList);
@@ -258,7 +298,11 @@ public class busquedaController {
         });
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    /**
+     * Método de inicialización que se llama cuando se completa la inicialización del controlador.
+     */
+    @FXML
+    // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         modelFactoryController = ModelFactoryController.getInstance();
         //loadTable();
@@ -280,47 +324,48 @@ public class busquedaController {
         assert txtCancion != null : "fx:id=\"txtCancion\" was not injected: check your FXML file 'busqueda.fxml'.";
         assert txtDuracion != null : "fx:id=\"txtDuracion\" was not injected: check your FXML file 'busqueda.fxml'.";
         assert txtGenero != null : "fx:id=\"txtGenero\" was not injected: check your FXML file 'busqueda.fxml'.";
+
         btnReproducir.setVisible(false);
         btnAgregar.setVisible(false);
     }
-    private boolean validarFields(){
-        boolean tieneTexto = !txtCancion.getText().isEmpty() &&
+
+    /**
+     * Método para mostrar un diálogo de error.
+     *
+     * @param message El mensaje de error a mostrar.
+     */
+    private void showErrorDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    /**
+     * Método para mostrar un diálogo de éxito.
+     *
+     * @param message El mensaje de éxito a mostrar.
+     */
+    private void showSuccessDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Éxito");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    /**
+     * Método para validar que todos los campos de búsqueda estén llenos.
+     *
+     * @return true si todos los campos están llenos, false en caso contrario.
+     */
+    private boolean validarFields() {
+        return !txtCancion.getText().isEmpty() &&
                 !txtAlbum.getText().isEmpty() &&
                 !txtGenero.getText().isEmpty() &&
                 !txtArtista.getText().isEmpty() &&
                 !txtAnio.getText().isEmpty() &&
                 !txtDuracion.getText().isEmpty();
-        return tieneTexto;
     }
-
-    public void showErrorDialog(String message) throws MalformedURLException {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error de autenticación");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        // Aplicar el estilo personalizado al diálogo de error
-        URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
-        alert.getDialogPane().getStylesheets().add((url1.toExternalForm()));
-        alert.getDialogPane().getStyleClass().add("dialog-pane");
-
-        alert.showAndWait();
-    }
-
-    public void showSuccessDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Éxito");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        // Aplicar el estilo personalizado al diálogo de éxito
-        URL cssFileURL = getClass().getResource("/co/edu/uniquindio/storify/view/styles/estilos.css");
-        if (cssFileURL != null) {
-            alert.getDialogPane().getStylesheets().add(cssFileURL.toExternalForm());
-            alert.getDialogPane().getStyleClass().add("dialog-pane");
-        }
-
-        alert.showAndWait();
-    }
-
 }

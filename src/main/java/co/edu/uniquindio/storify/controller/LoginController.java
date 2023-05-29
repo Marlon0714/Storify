@@ -35,21 +35,33 @@ public class LoginController {
     @FXML // fx:id="txtUsername"
     private TextField txtUsername; // Value injected by FXMLLoader
 
-
-    public void actionLogin(javafx.event.ActionEvent event) throws IOException {
+    /**
+     * Acción de inicio de sesión.
+     *
+     * @param event Evento de acción.
+     * @throws IOException Si ocurre un error al cargar la siguiente vista.
+     */
+    public void actionLogin(ActionEvent event) throws IOException {
         modelFactoryController.iniciarSesion(txtUsername.getText(), pswdField.getText());
-        if(modelFactoryController.getUsuariologgeado() instanceof Administrador){
+
+        if (modelFactoryController.getUsuariologgeado() instanceof Administrador) {
             mostrarAdminView();
-        }else {
+        } else {
             this.modelFactoryController.iniciarSesion(txtUsername.getText(), pswdField.getText());
             mostrarUserGui();
         }
     }
 
+    /**
+     * Acción de registro.
+     *
+     * @param event Evento de acción.
+     * @throws IOException Si ocurre un error al cargar la vista de registro.
+     */
     public void actionRegistro(ActionEvent event) throws IOException {
         URL url = new File("src/main/java/co/edu/uniquindio/storify/view/registro.fxml").toURI().toURL();
         Parent root1 = FXMLLoader.load(url);
-        Scene scene1 = new Scene(root1, 600 , 406);
+        Scene scene1 = new Scene(root1, 600, 406);
         Stage stage1 = new Stage();
         URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
         scene1.getStylesheets().add(url1.toExternalForm());
@@ -57,15 +69,19 @@ public class LoginController {
         stage1.setScene(scene1);
         stage1.show();
 
-
         Stage stage = (Stage) btnLogin.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Muestra la vista de administrador.
+     *
+     * @throws IOException Si ocurre un error al cargar la vista de administrador.
+     */
     void mostrarAdminView() throws IOException {
         URL url = new File("src/main/java/co/edu/uniquindio/storify/view/gui2.fxml").toURI().toURL();
         Parent root1 = FXMLLoader.load(url);
-        Scene scene1 = new Scene(root1, 906 , 694);
+        Scene scene1 = new Scene(root1, 906, 694);
         Stage stage1 = new Stage();
         URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
         scene1.getStylesheets().add(url1.toExternalForm());
@@ -73,21 +89,19 @@ public class LoginController {
         stage1.setScene(scene1);
         stage1.show();
 
-
         Stage stage = (Stage) btnLogin.getScene().getWindow();
         stage.close();
     }
 
-
-
-
-
-
-
+    /**
+     * Muestra la vista de usuario.
+     *
+     * @throws IOException Si ocurre un error al cargar la vista de usuario.
+     */
     void mostrarUserGui() throws IOException {
         URL url2 = new File("src/main/java/co/edu/uniquindio/storify/view/gui1.fxml").toURI().toURL();
         Parent root2 = FXMLLoader.load(url2);
-        Scene scene2 = new Scene(root2, 906 , 694);
+        Scene scene2 = new Scene(root2, 906, 694);
         Stage stage2 = new Stage();
         URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
         scene2.getStylesheets().add(url1.toExternalForm());
@@ -98,6 +112,11 @@ public class LoginController {
         Stage stage = (Stage) btnLogin.getScene().getWindow();
         stage.close();
     }
+
+    /**
+     * Método de inicialización del controlador.
+     * Verifica la inyección de elementos FXML y obtiene una instancia del controlador de modelos.
+     */
     @FXML
     void initialize() {
         assert pswdField != null : "fx:id=\"pswdField\" was not injected: check your FXML file 'login.fxml'.";

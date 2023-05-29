@@ -24,35 +24,81 @@ public class ModelFactoryController {
 
     Usuario usuariologgeado = new Usuario();
 
+    /**
+     * Obtiene la instancia de la tienda de música actual.
+     * @return La instancia de la tienda de música.
+     */
     public TiendaMusica getTiendaMusica() {
         return tiendaMusica;
     }
 
+    /**
+     * Establece la instancia de la tienda de música.
+     * @param tiendaMusica La instancia de la tienda de música a establecer.
+     */
     public void setTiendaMusica(TiendaMusica tiendaMusica) {
         this.tiendaMusica = tiendaMusica;
     }
 
+    /**
+     * Obtiene el usuario que ha iniciado sesión actualmente.
+     * @return El usuario que ha iniciado sesión.
+     */
     public Usuario getUsuariologgeado() {
         return usuariologgeado;
     }
 
+    /**
+     * Establece el usuario que ha iniciado sesión.
+     * @param usuariologgeado El usuario que ha iniciado sesión.
+     */
     public void setUsuariologgeado(Usuario usuariologgeado) {
         this.usuariologgeado = usuariologgeado;
     }
 
+    /**
+     * Crea una nueva canción en la tienda de música.
+     * @param cancionAux La canción a crear.
+     * @throws ExistingSongException Si la canción ya existe.
+     */
     public void crearCancion(Cancion cancionAux) throws ExistingSongException {
         cargarRecursoBinario();
-        tiendaMusica.crearCancion(cancionAux.getNombre(),cancionAux.getCodigoArtista(),cancionAux.getAlbum(),cancionAux.getCaratula(),cancionAux.getAnio(),cancionAux.getDuracion(),cancionAux.getGenero(),cancionAux.getUrlYoutube());
+        tiendaMusica.crearCancion(
+                cancionAux.getNombre(),
+                cancionAux.getCodigoArtista(),
+                cancionAux.getAlbum(),
+                cancionAux.getCaratula(),
+                cancionAux.getAnio(),
+                cancionAux.getDuracion(),
+                cancionAux.getGenero(),
+                cancionAux.getUrlYoutube()
+        );
         System.out.println(cancionAux.getUrlYoutube());
         guardarRecursoBinario();
     }
 
+    /**
+     * Crea un nuevo artista en la tienda de música.
+     * @param artistaAux El artista a crear.
+     * @throws ExistingArtistException Si el artista ya existe.
+     */
     public void crearArtista(Artista artistaAux) throws ExistingArtistException {
         cargarRecursoBinario();
-        tiendaMusica.crearArtista(artistaAux.getCodigo(),artistaAux.getNombre(),artistaAux.getNacionalidad(),artistaAux.esGrupo(),artistaAux.getListaCanciones());
+        tiendaMusica.crearArtista(
+                artistaAux.getCodigo(),
+                artistaAux.getNombre(),
+                artistaAux.getNacionalidad(),
+                artistaAux.esGrupo(),
+                artistaAux.getListaCanciones()
+        );
         guardarRecursoBinario();
     }
 
+    /**
+     * Regresa a la interfaz gráfica anterior.
+     * @param button El botón que desencadena la acción.
+     * @throws IOException Si ocurre un error durante la carga de la interfaz gráfica.
+     */
     public void regresarGui(Button button) throws IOException {
         if(usuariologgeado instanceof Administrador){
             URL url = new File("src/main/java/co/edu/uniquindio/storify/view/gui2.fxml").toURI().toURL();
@@ -85,10 +131,16 @@ public class ModelFactoryController {
         }
     }
 
+    /**
+     * Elimina una canción de la tienda de música.
+     *
+     * @param cancionSeleccion La canción que se desea eliminar.
+     */
     public void eliminarCancion(Cancion cancionSeleccion) {
         tiendaMusica.eliminarCancion(cancionSeleccion);
         guardarRecursoBinario();
     }
+
 
 
     private static class SingletonHolder {
@@ -100,7 +152,9 @@ public class ModelFactoryController {
     public static ModelFactoryController getInstance() {
         return SingletonHolder.eINSTANCE;
     }
-
+    /**
+     *Metodo para inicializar la instancia de la clase
+     */
     public ModelFactoryController(){
         usuariologgeado = new Usuario();
         cargarRecursoBinario();
@@ -177,57 +231,121 @@ public class ModelFactoryController {
 
     }
 
+    /**
+     * Carga los datos de la tienda de música desde un recurso binario.
+     */
     private void cargarRecursoBinario() {
         tiendaMusica = Persistencia.cargarRecursoBinario();
     }
 
+    /**
+     * Guarda los datos de la tienda de música en un recurso binario.
+     */
     private void guardarRecursoBinario() {
         Persistencia.guardarRecursoBinario(tiendaMusica);
     }
+
+    /**
+     * Inicia sesión en la tienda de música.
+     *
+     * @param username El nombre de usuario.
+     * @param password La contraseña.
+     * @throws MalformedURLException Si la URL del estilo personalizado es incorrecta.
+     */
     public void iniciarSesion(String username, String password) throws MalformedURLException {
-        if(username.equals("admin") && password.equals("$aDmiN") ){
+        if (username.equals("admin") && password.equals("$aDmiN")) {
             usuariologgeado = new Administrador();
-        }else{
-            usuariologgeado = tiendaMusica.iniciarSesion(username,password);
+        } else {
+            usuariologgeado = tiendaMusica.iniciarSesion(username, password);
         }
-        if(usuariologgeado == null){
+        if (usuariologgeado == null) {
             showErrorDialog("Usuario y/o contraseña incorrectos");
         }
-
     }
+
+    /**
+     * Elimina una canción de la lista de canciones favoritas del usuario.
+     *
+     * @param cancionSeleccion La canción seleccionada.
+     */
     public void eliminarFavorita(Cancion cancionSeleccion) {
-        tiendaMusica.eliminarCancion(usuariologgeado,cancionSeleccion);
+        tiendaMusica.eliminarCancion(usuariologgeado, cancionSeleccion);
         guardarRecursoBinario();
     }
+
+    /**
+     * Obtiene la lista de canciones favoritas del usuario.
+     *
+     * @return La lista de canciones favoritas.
+     */
     public ListaCircular<Cancion> tomarListaCancionesFavoritas() {
-        if(usuariologgeado instanceof Administrador){
+        if (usuariologgeado instanceof Administrador) {
             return new ListaCircular<>();
-        }
-        else{
+        } else {
             return usuariologgeado.getListaCancionesFavoritas();
         }
     }
-    public Artista obtenerAutor(Cancion cancionA){
+
+    /**
+     * Obtiene el artista de una canción.
+     *
+     * @param cancionA La canción.
+     * @return El artista de la canción.
+     */
+    public Artista obtenerAutor(Cancion cancionA) {
         return tiendaMusica.buscarArtista(cancionA.getCodigoArtista());
     }
 
+    /**
+     * Crea un nuevo usuario en la tienda de música.
+     *
+     * @param username           El nombre de usuario.
+     * @param email              El correo electrónico.
+     * @param passwd             La contraseña.
+     * @param cancionesFavoritas La lista de canciones favoritas.
+     * @throws ExistingUserException Si el nombre de usuario ya está registrado.
+     */
     public void crearUsuario(String username, String email, String passwd, ListaCircular<Cancion> cancionesFavoritas) throws ExistingUserException {
-        tiendaMusica.crearUsuario(username,passwd,email,cancionesFavoritas);
+        tiendaMusica.crearUsuario(username, passwd, email, cancionesFavoritas);
         guardarRecursoBinario();
     }
 
-    public ListaDobleEnlazada<Cancion> buscarCancionOR(Cancion cancionABuscar){
+    /**
+     * Busca canciones que cumplan con alguna de las características especificadas.
+     *
+     * @param cancionABuscar La canción a buscar.
+     * @return La lista de canciones que cumplen con las características.
+     */
+    public ListaDobleEnlazada<Cancion> buscarCancionOR(Cancion cancionABuscar) {
         return tiendaMusica.buscarCancionesOR(cancionABuscar);
     }
 
+    /**
+     * Busca canciones que cumplan con todas las características especificadas.
+     *
+     * @param cancionAux La canción a buscar.
+     * @return La lista de canciones que cumplen con las características.
+     */
     public ListaDobleEnlazada<Cancion> buscarCancionAND(Cancion cancionAux) {
         return tiendaMusica.buscarCancionesAND(cancionAux);
     }
 
-    public ListaDobleEnlazada<Cancion> buscarCancionesArtista(String artista){
+    /**
+     * Busca canciones de un artista específico.
+     *
+     * @param artista El nombre del artista.
+     * @return La lista de canciones del artista.
+     */
+    public ListaDobleEnlazada<Cancion> buscarCancionesArtista(String artista) {
         return tiendaMusica.buscarCancionesArtista(artista);
     }
 
+    /**
+     * Busca el código de un artista por su nombre.
+     *
+     * @param nombre El nombre del artista.
+     * @return El código del artista.
+     */
     public String buscarArt(String nombre) {
         Artista artistaAux = new Artista();
         artistaAux.setNombre(nombre);
@@ -235,29 +353,64 @@ public class ModelFactoryController {
         return artistaAux.getCodigo();
     }
 
-    public void agregarFavorita(Cancion cancion){
-        tiendaMusica.guardarCancion(usuariologgeado,cancion);
+    /**
+     * Agrega una canción a la lista de canciones favoritas del usuario.
+     *
+     * @param cancion La canción a agregar.
+     */
+    public void agregarFavorita(Cancion cancion) {
+        tiendaMusica.guardarCancion(usuariologgeado, cancion);
         guardarRecursoBinario();
     }
-    public String generoPopular(){
+
+    /**
+     * Obtiene el género de música más popular en la tienda.
+     *
+     * @return El género más popular.
+     */
+    public String generoPopular() {
         return tiendaMusica.consultarGeneroMasCanciones();
     }
 
-    public Artista artistaPopular(){
+    /**
+     * Obtiene el artista más popular en la tienda.
+     *
+     * @return El artista más popular.
+     */
+    public Artista artistaPopular() {
         return tiendaMusica.obtenerArtistaMasPopular();
     }
 
-    public void deshacer(){
+    /**
+     * Deshace la última acción realizada por el usuario.
+     */
+    public void deshacer() {
         tiendaMusica.deshacer(usuariologgeado);
     }
 
-    public void rehacer(){
+    /**
+     * Rehace la última acción deshecha por el usuario.
+     */
+    public void rehacer() {
         tiendaMusica.rehacer(usuariologgeado);
     }
 
+    /**
+     * Busca una canción por su código.
+     *
+     * @param codigoCancion El código de la canción.
+     * @return La canción encontrada.
+     */
     public Cancion buscarCancion(String codigoCancion) {
         return tiendaMusica.buscarCancion(codigoCancion);
     }
+
+    /**
+     * Muestra un diálogo de error con el mensaje especificado.
+     *
+     * @param message El mensaje de error.
+     * @throws MalformedURLException Si la URL del estilo personalizado es incorrecta.
+     */
     public void showErrorDialog(String message) throws MalformedURLException {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error de autenticación");
@@ -272,22 +425,45 @@ public class ModelFactoryController {
         alert.showAndWait();
     }
 
+    /**
+     * Carga los artistas y canciones desde un archivo y los agrega a la tienda de música existente.
+     *
+     * @param archivo El archivo de donde se cargarán los datos.
+     */
     public void cargarArtistasYCancionesDesdeArchivo(String archivo) {
         // Agregar los artistas y canciones cargados a la TiendaMusica existente
         ArbolBinario<Artista> artistasCargados = Persistencia.cargarArtistas(archivo, tiendaMusica.getArtistas());
         tiendaMusica.setArtistas(Persistencia.cargarCanciones(archivo, artistasCargados));
         guardarRecursoBinario();
     }
-    public void artistas(ComboBox a){
+
+    /**
+     * Agrega los nombres de los artistas al ComboBox especificado.
+     *
+     * @param a El ComboBox donde se agregarán los nombres de los artistas.
+     */
+    public void artistas(ComboBox a) {
         ArbolBinario<Artista> arb = tiendaMusica.getArtistas();
-        for(Artista artist : arb){
+        for (Artista artist : arb) {
             a.getItems().add(artist.getNombre());
         }
     }
-    public ArbolBinario<Artista> getArtistas(){
+
+    /**
+     * Obtiene el árbol de artistas de la tienda de música.
+     *
+     * @return El árbol de artistas.
+     */
+    public ArbolBinario<Artista> getArtistas() {
         return tiendaMusica.getArtistas();
     }
-    public ListaDobleEnlazada<Cancion>obtenerCanciones(){
+
+    /**
+     * Obtiene la lista de canciones de la tienda de música.
+     *
+     * @return La lista de canciones.
+     */
+    public ListaDobleEnlazada<Cancion> obtenerCanciones() {
         return tiendaMusica.obtenerCanciones();
     }
 }

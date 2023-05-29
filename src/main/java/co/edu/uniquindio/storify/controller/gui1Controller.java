@@ -129,29 +129,53 @@ public class gui1Controller {
     @FXML // fx:id="tableCanciones"
     private TableView<Cancion> tableCanciones; // Value injected by FXMLLoader
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Buscar".
+     * Abre la vista de búsqueda de canciones.
+     *
+     * @param event El evento de acción.
+     * @throws IOException Si ocurre un error al cargar la vista.
+     */
     @FXML
     void actionBuscar(ActionEvent event) throws IOException {
+        // Cargar la vista de búsqueda de canciones
         URL url2 = new File("src/main/java/co/edu/uniquindio/storify/view/busqueda.fxml").toURI().toURL();
         Parent root2 = FXMLLoader.load(url2);
-        Scene scene2 = new Scene(root2, 906 , 694);
+        Scene scene2 = new Scene(root2, 906, 694);
         Stage stage2 = new Stage();
+
+        // Establecer el estilo de la vista
         URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
         scene2.getStylesheets().add(url1.toExternalForm());
+
+        // Configurar la ventana de la vista
         stage2.setTitle("Buscar canciones");
         stage2.setScene(scene2);
         stage2.show();
 
+        // Cerrar la ventana actual
         Stage stage = (Stage) btnBuscar.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Eliminar".
+     * Elimina la canción seleccionada de la lista de canciones favoritas.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionEliminar(ActionEvent event) {
         this.modelFactoryController.eliminarFavorita(cancionSeleccion);
         loadTable();
-
     }
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Ordenar por Álbum".
+     * Ordena la lista de canciones por el valor de la columna del álbum.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenAlbum(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -164,6 +188,12 @@ public class gui1Controller {
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Ordenar por Año".
+     * Ordena la lista de canciones por el valor de la columna del año.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenAnio(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -176,6 +206,12 @@ public class gui1Controller {
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Ordenar por Duración".
+     * Ordena la lista de canciones por el valor de la columna de la duración.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenDuracion(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -188,6 +224,12 @@ public class gui1Controller {
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Ordenar por Género".
+     * Ordena la lista de canciones por el valor de la columna del género.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenGenero(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -200,6 +242,12 @@ public class gui1Controller {
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Ordenar por Canción".
+     * Ordena la lista de canciones por el valor de la columna del nombre de la canción.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenarCancion(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -212,34 +260,51 @@ public class gui1Controller {
         tableCanciones.setItems(items);
     }
 
-
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Deshacer".
+     * Deshace la última acción realizada en la lista de canciones favoritas.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
-    void actionDeshacer(ActionEvent event){
+    void actionDeshacer(ActionEvent event) {
         modelFactoryController.deshacer();
         loadTable();
     }
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Rehacer".
+     * Rehace la última acción deshecha en la lista de canciones favoritas.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
-    void actionRehacer(ActionEvent event){
+    void actionRehacer(ActionEvent event) {
         modelFactoryController.rehacer();
         loadTable();
     }
 
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Reproducir".
+     * Reproduce la canción seleccionada.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
-    void actionReproducir(ActionEvent event){
-        // Initialize Chromium.
+    void actionReproducir(ActionEvent event) {
+        // Inicializar Chromium
         EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED)
                 .licenseKey("1BNDHFSC1G6ACMC4FPYDA9JCGE2ON6O8O1TLU39NUKF2TT6JPNM2U3U13827LFGQ5LROE8")
                 .build();
         Engine engine = Engine.newInstance(options);
 
-// Create a Browser instance.
+        // Crear una instancia del navegador
         Browser browser = engine.newBrowser();
 
-// Load the required web page.
+        // Cargar la página web requerida
         browser.navigation().loadUrl(cancionSeleccion.getUrlYoutube());
 
-// Create and embed JavaFX BrowserView component to display web content.
+        // Crear y embeber el componente JavaFX BrowserView para mostrar el contenido web
         BrowserView view = BrowserView.newInstance(browser);
 
         Scene scene = new Scene(new BorderPane(view), 600, 406);
@@ -248,58 +313,96 @@ public class gui1Controller {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-// Shutdown Chromium and release allocated resources.
+        // Apagar Chromium y liberar los recursos asignados
         primaryStage.setOnCloseRequest(event1 -> engine.close());
     }
 
-    /***@FXML
-    void actionReproducir(ActionEvent event) {
-        NativeInterface.open();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                JFrame frame = new JFrame("YouTube Viewer");
-                frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-                frame.getContentPane().add(getBrowserPanel(cancionSeleccion), BorderLayout.CENTER);
-                frame.setSize(800, 600);
-                frame.setLocationByPlatform(true);
-                frame.setVisible(true);
-            }
-        });
-        NativeInterface.runEventPump();
-        // don't forget to properly close native components
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            //@Override
-            public void run() {
-                NativeInterface.close();
-            }
-        }));
-    }/**/
-
-    /**public static JPanel getBrowserPanel(Cancion cancionSeleccion) {
-        JPanel webBrowserPanel = new JPanel(new BorderLayout());
-        JWebBrowser webBrowser = new JWebBrowser(new chrriis.dj.nativeswing.NSOption[]{});
-        webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
-        webBrowser.setBarsVisible(false);
-        webBrowser.navigate(cancionSeleccion.getUrlYoutube());
-        return webBrowserPanel;
-    }**/
-
-
+    /**
+     * Método que se ejecuta al hacer clic en el botón "Consultar".
+     * Muestra información sobre el género con más canciones y el artista más popular.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
-    void actionOrdenArtista(ActionEvent event) {
-        // Obtener la lista de elementos actualmente mostrados en la tabla
-        ObservableList<Cancion> items = tableCanciones.getItems();
+    void actionConsultar(ActionEvent event) {
+        String genero = modelFactoryController.generoPopular();
+        Artista artista = modelFactoryController.artistaPopular();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Top");
+        alert.setHeaderText(null);
+        alert.setContentText("El género con más canciones es: " + genero + "\n El artista más popular es: " + artista.getNombre());
 
-        // Ordenar la lista por el valor de la columna del nombre del artista
-        FXCollections.sort(items, Comparator.comparing(cancion -> {
-            Artista artista = modelFactoryController.obtenerAutor(cancion);
-            return artista != null ? artista.getNombre() : "";
-        }));
+        // Aplicar el estilo personalizado al diálogo de éxito
+        URL cssFileURL = getClass().getResource("/co/edu/uniquindio/storify/view/styles/estilos.css");
+        if (cssFileURL != null) {
+            alert.getDialogPane().getStylesheets().add(cssFileURL.toExternalForm());
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
+        }
 
-        // Actualizar la tabla con la lista ordenada
-        tableCanciones.setItems(items);
+        alert.showAndWait();
+
     }
 
+    /**
+     * Método que muestra la información de la canción seleccionada en los elementos de la interfaz.
+     */
+    private void mostrarInfo() {
+        if (cancionSeleccion != null) {
+            labelTitle.setText(cancionSeleccion.getNombre());
+            labelAlbum.setText(cancionSeleccion.getAlbum());
+            labelAnio.setText(String.valueOf(cancionSeleccion.getAnio()));
+            labelDuracion.setText(convertirDuracion(cancionSeleccion.getDuracion()));
+            labelGenero.setText(cancionSeleccion.getGenero());
+
+            labelTitle.setVisible(true);
+            labelAlbum.setVisible(true);
+            labelGenero.setVisible(true);
+            labelDuracion.setVisible(true);
+            labelAnio.setVisible(true);
+
+            labelTitle1.setVisible(true);
+            labelDuracion1.setVisible(true);
+            labelAlbum1.setVisible(true);
+            labelGenero1.setVisible(true);
+            labelAnio1.setVisible(true);
+            String imagePath = cancionSeleccion.getCaratula();
+
+            // Establecer la imagen de fondo del Label
+            imageLabel.setStyle("-fx-background-image: url('file:" + imagePath + "');");
+
+        }
+    }
+
+    /**
+     * Convierte un número entero en una cadena de formato "minutos:segundos".
+     *
+     * @param numero El número entero a convertir.
+     * @return La cadena de formato "minutos:segundos".
+     */
+    public String convertirDuracion(int numero) {
+        int segundos = numero % 100;
+        int minutos = numero / 100;
+        return minutos + ":" + segundos;
+    }
+
+    /**
+     * Método de inicialización que se ejecuta al cargar la interfaz.
+     */
+    @FXML
+    void initialize() {
+        modelFactoryController = ModelFactoryController.getInstance();
+        loadTable();
+        labelAlbum.setVisible(false);
+        labelTitle.setVisible(false);
+        labelGenero.setVisible(false);
+        labelDuracion.setVisible(false);
+        labelAnio.setVisible(false);
+        labelTitle1.setVisible(false);
+        labelDuracion1.setVisible(false);
+        labelAlbum1.setVisible(false);
+        labelGenero1.setVisible(false);
+        labelAnio1.setVisible(false);
+    }
     Cancion cancionSeleccion;
 
 
@@ -352,80 +455,6 @@ public class gui1Controller {
         }else{
             observableList.clear();
         }
-    }
-
-
-    @FXML
-    void actionConsultar(ActionEvent event){
-        String genero = modelFactoryController.generoPopular();
-        Artista artista = modelFactoryController.artistaPopular();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Top");
-            alert.setHeaderText(null);
-            alert.setContentText("El género con más canciones es: "+genero+"\n El artista más popular es: "+artista.getNombre());
-
-            // Aplicar el estilo personalizado al diálogo de éxito
-            URL cssFileURL = getClass().getResource("/co/edu/uniquindio/storify/view/styles/estilos.css");
-            if (cssFileURL != null) {
-                alert.getDialogPane().getStylesheets().add(cssFileURL.toExternalForm());
-                alert.getDialogPane().getStyleClass().add("dialog-pane");
-            }
-
-            alert.showAndWait();
-
-    }
-
-
-    private void mostrarInfo() {
-        if(cancionSeleccion != null){
-            labelTitle.setText(cancionSeleccion.getNombre());
-            labelAlbum.setText(cancionSeleccion.getAlbum());
-            labelAnio.setText(String.valueOf(cancionSeleccion.getAnio()));
-            labelDuracion.setText(convertirDuracion(cancionSeleccion.getDuracion()));
-            labelGenero.setText(cancionSeleccion.getGenero());
-
-            labelTitle.setVisible(true);
-            labelAlbum.setVisible(true);
-            labelGenero.setVisible(true);
-            labelDuracion.setVisible(true);
-            labelAnio.setVisible(true);
-
-            labelTitle1.setVisible(true);
-            labelDuracion1.setVisible(true);
-            labelAlbum1.setVisible(true);
-            labelGenero1.setVisible(true);
-            labelAnio1.setVisible(true);
-            String imagePath = cancionSeleccion.getCaratula();
-
-            // Establecer la imagen de fondo del Label
-            imageLabel.setStyle("-fx-background-image: url('file:" + imagePath + "');");
-
-
-
-        }
-    }
-    public String convertirDuracion(int numero) {
-        int segundos = numero % 100;
-        int minutos = numero / 100;
-        return minutos + ":" + segundos;
-    }
-
-
-    @FXML
-    void initialize() {
-        modelFactoryController = ModelFactoryController.getInstance();
-        loadTable();
-        labelAlbum.setVisible(false);
-        labelTitle.setVisible(false);
-        labelGenero.setVisible(false);
-        labelDuracion.setVisible(false);
-        labelAnio.setVisible(false);
-        labelTitle1.setVisible(false);
-        labelDuracion1.setVisible(false);
-        labelAlbum1.setVisible(false);
-        labelGenero1.setVisible(false);
-        labelAnio1.setVisible(false);
-
     }
 
 }

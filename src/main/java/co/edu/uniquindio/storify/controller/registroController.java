@@ -46,20 +46,32 @@ public class registroController {
     @FXML // fx:id="txtUsername"
     private TextField txtUsername; // Value injected by FXMLLoader
 
+    /**
+     * Método para manejar el evento de registro de usuario.
+     *
+     * @param event El evento que desencadena el registro.
+     * @throws IOException Si ocurre un error al cargar la vista de inicio de sesión.
+     */
     @FXML
     void actionRegistrar(ActionEvent event) throws IOException {
         ListaCircular<Cancion> cancionesFav = new ListaCircular<>();
         String username = txtUsername.getText();
         String passwd = txtPasswd.getText();
         String email = txtCorreo.getText();
-    try {
-        modelFactoryController.crearUsuario(username,email,passwd,cancionesFav);
-        mostrarLogin();
-    }catch (ExistingUserException e){
-        showErrorDialog("Usuario ya creado");
-    }
+
+        try {
+            modelFactoryController.crearUsuario(username, email, passwd, cancionesFav);
+            mostrarLogin();
+        } catch (ExistingUserException e) {
+            showErrorDialog("Usuario ya creado");
+        }
     }
 
+    /**
+     * Método para mostrar la vista de inicio de sesión después de un registro exitoso.
+     *
+     * @throws IOException Si ocurre un error al cargar la vista de inicio de sesión.
+     */
     void mostrarLogin() throws IOException {
         URL url = new File("src/main/java/co/edu/uniquindio/storify/view/login.fxml").toURI().toURL();
         Parent root1 = FXMLLoader.load(url);
@@ -71,18 +83,24 @@ public class registroController {
         stage1.setScene(scene1);
         stage1.show();
 
-
+        // Cerrar la ventana actual de registro
         Stage stage = (Stage) btnRegistrarse.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Método para mostrar un cuadro de diálogo de error.
+     *
+     * @param message El mensaje de error a mostrar.
+     * @throws MalformedURLException Si ocurre un error al cargar el archivo de estilos CSS.
+     */
     public void showErrorDialog(String message) throws MalformedURLException {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error creando usuario");
         alert.setHeaderText(null);
         alert.setContentText(message);
 
-        // Aplicar el estilo personalizado al diálogo de error
+        // Aplicar el estilo personalizado al cuadro de diálogo de error
         URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
         alert.getDialogPane().getStylesheets().add((url1.toExternalForm()));
         alert.getDialogPane().getStyleClass().add("dialog-pane");
@@ -90,7 +108,11 @@ public class registroController {
         alert.showAndWait();
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    /**
+     * Método de inicialización del controlador.
+     * Se llama automáticamente cuando la inicialización está completa.
+     */
+    @FXML
     void initialize() {
         modelFactoryController = ModelFactoryController.getInstance();
         assert btnRegistrarse != null : "fx:id=\"btnRegistrarse\" was not injected: check your FXML file 'registro.fxml'.";
@@ -98,7 +120,6 @@ public class registroController {
         assert txtCorreo != null : "fx:id=\"txtCorreo\" was not injected: check your FXML file 'registro.fxml'.";
         assert txtPasswd != null : "fx:id=\"txtPasswd\" was not injected: check your FXML file 'registro.fxml'.";
         assert txtUsername != null : "fx:id=\"txtUsername\" was not injected: check your FXML file 'registro.fxml'.";
-
     }
 
 }

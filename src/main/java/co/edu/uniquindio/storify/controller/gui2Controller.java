@@ -125,6 +125,13 @@ public class gui2Controller {
     @FXML // fx:id="tableCanciones"
     private TableView<Cancion> tableCanciones; // Value injected by FXMLLoader
 
+    /**
+     * Acción del botón "Buscar".
+     * Abre la vista de búsqueda y carga la escena correspondiente.
+     *
+     * @param event El evento de acción.
+     * @throws IOException Si ocurre un error al cargar la vista.
+     */
     @FXML
     void actionBuscar(ActionEvent event) throws IOException {
         URL url2 = new File("src/main/java/co/edu/uniquindio/storify/view/busqueda.fxml").toURI().toURL();
@@ -141,13 +148,24 @@ public class gui2Controller {
         stage.close();
     }
 
+    /**
+     * Acción del botón "Eliminar".
+     * Elimina la canción seleccionada y carga la tabla actualizada.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionEliminar(ActionEvent event) {
         this.modelFactoryController.eliminarCancion(cancionSeleccion);
         loadTable();
-
     }
 
+    /**
+     * Acción del botón "Ordenar por álbum".
+     * Ordena la tabla de canciones por el valor de la columna del álbum.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenAlbum(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -160,6 +178,12 @@ public class gui2Controller {
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Acción del botón "Ordenar por año".
+     * Ordena la tabla de canciones por el valor de la columna del año.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenAnio(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -172,18 +196,30 @@ public class gui2Controller {
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Acción del botón "Ordenar por duración".
+     * Ordena la tabla de canciones por el valor de la columna de duración.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenDuracion(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
         ObservableList<Cancion> items = tableCanciones.getItems();
 
-        // Ordenar la lista por el valor de la columna de la duración
+        // Ordenar la lista por el valor de la columna de duración
         FXCollections.sort(items, Comparator.comparing(Cancion::getDuracion));
 
         // Actualizar la tabla con la lista ordenada
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Acción del botón "Ordenar por género".
+     * Ordena la tabla de canciones por el valor de la columna del género.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenGenero(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -196,6 +232,12 @@ public class gui2Controller {
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Acción del botón "Ordenar por canción".
+     * Ordena la tabla de canciones por el valor de la columna del nombre de la canción.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenarCancion(ActionEvent event) {
         // Obtener la lista de elementos actualmente mostrados en la tabla
@@ -208,21 +250,27 @@ public class gui2Controller {
         tableCanciones.setItems(items);
     }
 
+    /**
+     * Acción del botón "Reproducir".
+     * Inicia la reproducción de la canción seleccionada en un reproductor de video.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
-    void actionReproducir(ActionEvent event){
+    void actionReproducir(ActionEvent event) {
         // Initialize Chromium.
         EngineOptions options = EngineOptions.newBuilder(HARDWARE_ACCELERATED)
                 .licenseKey("1BNDHFSC1G6ACMC4FPYDA9JCGE2ON6O8O1TLU39NUKF2TT6JPNM2U3U13827LFGQ5LROE8")
                 .build();
         Engine engine = Engine.newInstance(options);
 
-// Create a Browser instance.
+        // Create a Browser instance.
         Browser browser = engine.newBrowser();
 
-// Load the required web page.
+        // Load the required web page.
         browser.navigation().loadUrl(cancionSeleccion.getUrlYoutube());
 
-// Create and embed JavaFX BrowserView component to display web content.
+        // Create and embed JavaFX BrowserView component to display web content.
         BrowserView view = BrowserView.newInstance(browser);
 
         Scene scene = new Scene(new BorderPane(view), 600, 406);
@@ -231,63 +279,36 @@ public class gui2Controller {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-// Shutdown Chromium and release allocated resources.
+        // Shutdown Chromium and release allocated resources.
         primaryStage.setOnCloseRequest(event1 -> engine.close());
     }
 
-    /***@FXML
-     void actionReproducir(ActionEvent event) {
-     NativeInterface.open();
-     SwingUtilities.invokeLater(new Runnable() {
-     public void run() {
-     JFrame frame = new JFrame("YouTube Viewer");
-     frame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-     frame.getContentPane().add(getBrowserPanel(cancionSeleccion), BorderLayout.CENTER);
-     frame.setSize(800, 600);
-     frame.setLocationByPlatform(true);
-     frame.setVisible(true);
-     }
-     });
-     NativeInterface.runEventPump();
-     // don't forget to properly close native components
-     Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-     //@Override
-     public void run() {
-     NativeInterface.close();
-     }
-     }));
-     }/**/
-
-    /**public static JPanel getBrowserPanel(Cancion cancionSeleccion) {
-     JPanel webBrowserPanel = new JPanel(new BorderLayout());
-     JWebBrowser webBrowser = new JWebBrowser(new chrriis.dj.nativeswing.NSOption[]{});
-     webBrowserPanel.add(webBrowser, BorderLayout.CENTER);
-     webBrowser.setBarsVisible(false);
-     webBrowser.navigate(cancionSeleccion.getUrlYoutube());
-     return webBrowserPanel;
-     }**/
-
-
+    /**
+     * Acción del botón "Ordenar por artista".
+     * Ordena la tabla de canciones por el valor de la columna del nombre del artista.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionOrdenArtista(ActionEvent event) {
-            // Obtener la lista de elementos actualmente mostrados en la tabla
-            ObservableList<Cancion> items = tableCanciones.getItems();
+        // Obtener la lista de elementos actualmente mostrados en la tabla
+        ObservableList<Cancion> items = tableCanciones.getItems();
 
-            // Ordenar la lista por el valor de la columna del nombre del artista
-            FXCollections.sort(items, Comparator.comparing(cancion -> {
-                Artista artista = modelFactoryController.obtenerAutor(cancion);
-                return artista != null ? artista.getNombre() : "";
-            }));
+        // Ordenar la lista por el valor de la columna del nombre del artista
+        FXCollections.sort(items, Comparator.comparing(cancion -> {
+            Artista artista = modelFactoryController.obtenerAutor(cancion);
+            return artista != null ? artista.getNombre() : "";
+        }));
 
-            // Actualizar la tabla con la lista ordenada
-            tableCanciones.setItems(items);
-
-
+        // Actualizar la tabla con la lista ordenada
+        tableCanciones.setItems(items);
     }
 
     Cancion cancionSeleccion;
 
-
+    /**
+     * Carga los datos en la tabla de canciones.
+     */
     private void loadTable() {
         columnCancion.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         columnArtista.setCellValueFactory(cellData -> {
@@ -319,29 +340,32 @@ public class gui2Controller {
 
         List<Cancion> tempList = new ArrayList<>();
         ListaDobleEnlazada<Cancion> list = modelFactoryController.obtenerCanciones();
-
-        {
-            for (Cancion o: list) {
-                tempList.add(o);
-
-            }
-            observableList.clear();
-            observableList.addAll(tempList);
-            tableCanciones.setItems(observableList);
-            tableCanciones.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    cancionSeleccion = newSelection;
-                    mostrarInfo();
-                }
-            });
+        for (Cancion o: list) {
+            tempList.add(o);
         }
+        observableList.clear();
+        observableList.addAll(tempList);
+        tableCanciones.setItems(observableList);
+        tableCanciones.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                cancionSeleccion = newSelection;
+                mostrarInfo();
+            }
+        });
     }
 
+    /**
+     * Acción del botón "Crear".
+     * Abre la ventana de creación de canciones.
+     *
+     * @param event El evento de acción.
+     * @throws IOException Si ocurre un error de entrada/salida.
+     */
     @FXML
     void actionCrear(ActionEvent event) throws IOException {
         URL url = new File("src/main/java/co/edu/uniquindio/storify/view/creacion.fxml").toURI().toURL();
         Parent root1 = FXMLLoader.load(url);
-        Scene scene1 = new Scene(root1, 906 , 694);
+        Scene scene1 = new Scene(root1, 906, 694);
         Stage stage1 = new Stage();
         URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
         scene1.getStylesheets().add(url1.toExternalForm());
@@ -349,11 +373,13 @@ public class gui2Controller {
         stage1.setScene(scene1);
         stage1.show();
 
-
         Stage stage = (Stage) btnCrear.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Muestra la información de la canción seleccionada.
+     */
     private void mostrarInfo() {
         if(cancionSeleccion != null){
             labelTitle.setText(cancionSeleccion.getNombre());
@@ -378,17 +404,24 @@ public class gui2Controller {
             // Establecer la imagen de fondo del Label
             imageLabel.setStyle("-fx-background-image: url('file:" + imagePath + "');");
 
-
-
         }
     }
-    public String convertirDuracion(int numero) {
-        int segundos = numero % 100;
-        int minutos = numero / 100;
-        return minutos + ":" + segundos;
+
+    /**
+     * Convierte la duración de una canción en segundos a un formato más legible (mm:ss).
+     *
+     * @param duration La duración en segundos.
+     * @return La duración en formato mm:ss.
+     */
+    private String convertirDuracion(int duration) {
+        int minutes = duration / 60;
+        int seconds = duration % 60;
+        return String.format("%02d:%02d", minutes, seconds);
     }
 
-
+    /**
+     * Inicializa el controlador después de que se haya cargado el archivo FXML.
+     */
     @FXML
     void initialize() {
         modelFactoryController = ModelFactoryController.getInstance();

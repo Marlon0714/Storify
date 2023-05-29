@@ -85,9 +85,17 @@ public class creacionController {
     @FXML // fx:id="txtUrl"
     private TextField txtUrl; // Value injected by FXMLLoader
 
+    /**
+     * Método ejecutado cuando se presiona el botón "Crear Artista".
+     * Crea un nuevo artista en la tienda de música con los datos ingresados en los campos correspondientes.
+     *
+     * @param event El evento de acción.
+     * @throws ExistingArtistException Si el artista ya existe en la tienda.
+     * @throws MalformedURLException Si ocurre un error al construir la URL.
+     */
     @FXML
     void actionCrearArtista(ActionEvent event) throws ExistingArtistException, MalformedURLException {
-        if(camposArtistaCompletos()) {
+        if (camposArtistaCompletos()) {
             Artista artistaAux = new Artista();
             artistaAux.setNombre(txtArtista.getText());
             artistaAux.setCodigo(txtCodigo.getText());
@@ -101,17 +109,24 @@ public class creacionController {
             ListaDobleEnlazada<Cancion> canciones = new ListaDobleEnlazada<>();
             artistaAux.setListaCanciones(canciones);
             modelFactoryController.crearArtista(artistaAux);
-            //System.out.println(artistaAux.getNombre() + " Añadido con éxito");
-            showSuccessDialog(artistaAux.getNombre()+" Añadido con éxito");
+            showSuccessDialog(artistaAux.getNombre() + " Añadido con éxito");
             artistas();
-        }else {
+        } else {
             showErrorDialog("Debe llenar todos los campos");
         }
     }
 
+    /**
+     * Método ejecutado cuando se presiona el botón "Crear Canción".
+     * Crea una nueva canción en la tienda de música con los datos ingresados en los campos correspondientes.
+     *
+     * @param event El evento de acción.
+     * @throws ExistingSongException Si la canción ya existe en la tienda.
+     * @throws MalformedURLException Si ocurre un error al construir la URL.
+     */
     @FXML
     void actionCrearCancion(ActionEvent event) throws ExistingSongException, MalformedURLException {
-        if(camposCancionCompletos()) {
+        if (camposCancionCompletos()) {
             Cancion cancionAux = new Cancion();
             cancionAux.setNombre(txtCancion.getText());
             cancionAux.setAnio(Integer.parseInt(txtAnio.getText()));
@@ -119,45 +134,41 @@ public class creacionController {
             cancionAux.setAlbum(txtAlbum.getText());
             cancionAux.setCaratula(txtCaratula.getText());
             cancionAux.setUrlYoutube(txtUrl.getText());
-            //System.out.println(cancionAux.getUrlYoutube());
             setArtistSong(comboArtista, cancionAux);
-            //cancionAux.setCodigoArtista(modelFactoryController.buscarArt(comboArtista.getSelectionModel().getSelectedItem().toString()));
             if (comboGenero.getSelectionModel().getSelectedIndex() == 1) {
                 cancionAux.setGenero("Rock");
-                //System.out.println(cancionAux.getUrlYoutube());
             }
-
             if (comboGenero.getSelectionModel().getSelectedIndex() == 2) {
                 cancionAux.setGenero("Pop");
-                //System.out.println(cancionAux.getUrlYoutube());
             }
             if (comboGenero.getSelectionModel().getSelectedIndex() == 3) {
                 cancionAux.setGenero("Punk");
-                //System.out.println(cancionAux.getUrlYoutube());
-
             }
             if (comboGenero.getSelectionModel().getSelectedIndex() == 4) {
                 cancionAux.setGenero("Reggaeton");
-                //System.out.println(cancionAux.getUrlYoutube());
             }
             if (comboGenero.getSelectionModel().getSelectedIndex() == 5) {
                 cancionAux.setGenero("Electrónica");
-                //System.out.println(cancionAux.getUrlYoutube());
             }
             modelFactoryController.crearCancion(cancionAux);
-            //System.out.println(cancionAux.getUrlYoutube());System.out.println(cancionAux.getUrlYoutube());
             showSuccessDialog("Canción creada con éxito");
         } else {
             showErrorDialog("Debe llenar todos los campos");
         }
-
     }
 
+    /**
+     * Método ejecutado cuando se presiona el botón "Regresar".
+     * Carga la vista anterior y cierra la ventana actual.
+     *
+     * @param event El evento de acción.
+     * @throws IOException Si ocurre un error al cargar la vista anterior.
+     */
     @FXML
     void actionRegresar(ActionEvent event) throws IOException {
         URL url = new File("src/main/java/co/edu/uniquindio/storify/view/gui2.fxml").toURI().toURL();
         Parent root1 = FXMLLoader.load(url);
-        Scene scene1 = new Scene(root1, 906 , 694);
+        Scene scene1 = new Scene(root1, 906, 694);
         Stage stage1 = new Stage();
         URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
         scene1.getStylesheets().add(url1.toExternalForm());
@@ -165,16 +176,24 @@ public class creacionController {
         stage1.setScene(scene1);
         stage1.show();
 
-
         Stage stage = (Stage) btnRegresar.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Método ejecutado cuando se presiona el botón "Reproducir".
+     * Reproduce la canción seleccionada.
+     *
+     * @param event El evento de acción.
+     */
     @FXML
     void actionReproducir(ActionEvent event) {
-
+        // Implementación pendiente
     }
 
+    /**
+     * Inicializa el controlador después de que su elemento raíz haya sido completamente procesado.
+     */
     @FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         modelFactoryController = ModelFactoryController.getInstance();
@@ -196,40 +215,74 @@ public class creacionController {
         assert txtNacionalidad != null : "fx:id=\"txtNacionalidad\" was not injected: check your FXML file 'creacion.fxml'.";
         assert txtUrl != null : "fx:id=\"txtUrl\" was not injected: check your FXML file 'creacion.fxml'.";
 
-    }
-    public void initializeCombo(){
-         comboGenero.getItems().add(" ");
-         comboGenero.getItems().add("Rock");
-         comboGenero.getItems().add("Pop");
-         comboGenero.getItems().add("Punk");
-         comboGenero.getItems().add("Reggaeton");
-         comboGenero.getItems().add("Electrónica");
-         comboGrupo.getItems().add(" ");
-         comboGrupo.getItems().add("Si");
-         comboGrupo.getItems().add("No");
-         artistas();
 
     }
-    public void artistas(){
+
+    /**
+     * Inicializa los combos de género y grupo con sus opciones.
+     */
+    public void initializeCombo() {
+        comboGenero.getItems().add(" ");
+        comboGenero.getItems().add("Rock");
+        comboGenero.getItems().add("Pop");
+        comboGenero.getItems().add("Punk");
+        comboGenero.getItems().add("Reggaeton");
+        comboGenero.getItems().add("Electrónica");
+        comboGrupo.getItems().add(" ");
+        comboGrupo.getItems().add("Si");
+        comboGrupo.getItems().add("No");
+        artistas();
+
+    }
+
+    /**
+     * Carga los artistas disponibles en el combo de artistas.
+     */
+    public void artistas() {
         comboArtista.getItems().clear();
         modelFactoryController.artistas(comboArtista);
     }
-    public void setArtistSong(ComboBox a,Cancion b){
+
+    /**
+     * Asigna el código del artista seleccionado a una canción.
+     *
+     * @param a La lista desplegable de artistas.
+     * @param b La canción a la que se le asignará el código del artista.
+     */
+    public void setArtistSong(ComboBox a, Cancion b) {
         String selectedText = a.getSelectionModel().getSelectedItem().toString();
         ArbolBinario<Artista> arb = modelFactoryController.getArtistas();
-        for(Artista artist : arb){
-            if(artist.getNombre().equals(selectedText)){
+        for (Artista artist : arb) {
+            if (artist.getNombre().equals(selectedText)) {
                 b.setCodigoArtista(artist.getCodigo());
             }
         }
     }
+
+    /**
+     * Verifica si todos los campos del formulario de artista están completos.
+     *
+     * @return true si todos los campos están completos, false de lo contrario.
+     */
     private boolean camposArtistaCompletos() {
         return !txtArtista.getText().isEmpty() && !txtCodigo.getText().isEmpty() && !txtNacionalidad.getText().isEmpty() && comboGrupo.getSelectionModel().getSelectedIndex() > 0;
     }
 
+    /**
+     * Verifica si todos los campos del formulario de canción están completos.
+     *
+     * @return true si todos los campos están completos, false de lo contrario.
+     */
     private boolean camposCancionCompletos() {
         return !txtCancion.getText().isEmpty() && !txtAnio.getText().isEmpty() && !txtDuracion.getText().isEmpty() && !txtAlbum.getText().isEmpty() && !txtCaratula.getText().isEmpty() && !txtUrl.getText().isEmpty() && comboGenero.getSelectionModel().getSelectedIndex() > 0;
     }
+
+    /**
+     * Muestra un diálogo de error con el mensaje especificado.
+     *
+     * @param message El mensaje de error a mostrar.
+     * @throws MalformedURLException Si ocurre un error al cargar el archivo CSS del diálogo de error.
+     */
     public void showErrorDialog(String message) throws MalformedURLException {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -237,25 +290,27 @@ public class creacionController {
         alert.setContentText(message);
 
         // Aplicar el estilo personalizado al diálogo de error
-        URL url1 = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
-        alert.getDialogPane().getStylesheets().add((url1.toExternalForm()));
-        alert.getDialogPane().getStyleClass().add("dialog-pane");
+        URL url = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
+        alert.getDialogPane().getStylesheets().add(url.toExternalForm());
 
         alert.showAndWait();
     }
 
-    public void showSuccessDialog(String message) {
+    /**
+     * Muestra un diálogo de éxito con el mensaje especificado.
+     *
+     * @param message El mensaje de éxito a mostrar.
+     * @throws MalformedURLException Si ocurre un error al cargar el archivo CSS del diálogo de éxito.
+     */
+    public void showSuccessDialog(String message) throws MalformedURLException {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");
         alert.setHeaderText(null);
         alert.setContentText(message);
 
         // Aplicar el estilo personalizado al diálogo de éxito
-        URL cssFileURL = getClass().getResource("/co/edu/uniquindio/storify/view/styles/estilos.css");
-        if (cssFileURL != null) {
-            alert.getDialogPane().getStylesheets().add(cssFileURL.toExternalForm());
-            alert.getDialogPane().getStyleClass().add("dialog-pane");
-        }
+        URL url = new File("src/main/java/co/edu/uniquindio/storify/view/styles/estilos.css").toURI().toURL();
+        alert.getDialogPane().getStylesheets().add(url.toExternalForm());
 
         alert.showAndWait();
     }
