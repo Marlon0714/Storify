@@ -34,6 +34,9 @@ public class registroController {
     @FXML // fx:id="btnRegistrarse"
     private Button btnRegistrarse; // Value injected by FXMLLoader
 
+    @FXML
+    private Button btnVolver;
+
     @FXML // fx:id="logo"
     private Label logo; // Value injected by FXMLLoader
 
@@ -52,12 +55,16 @@ public class registroController {
         String username = txtUsername.getText();
         String passwd = txtPasswd.getText();
         String email = txtCorreo.getText();
-    try {
-        modelFactoryController.crearUsuario(username,email,passwd,cancionesFav);
-        mostrarLogin();
-    }catch (ExistingUserException e){
-        showErrorDialog("Usuario ya creado");
-    }
+        if (username.isEmpty() || passwd.isEmpty() || email.isEmpty()) {
+            showErrorDialog("Todos los campos deben estar completos");
+        }else {
+            try {
+                modelFactoryController.crearUsuario(username, email, passwd, cancionesFav);
+                mostrarLogin();
+            } catch (ExistingUserException e) {
+                showErrorDialog("Usuario ya creado");
+            }
+        }
     }
 
     void mostrarLogin() throws IOException {
@@ -76,6 +83,10 @@ public class registroController {
         stage.close();
     }
 
+    @FXML
+    void actionVolver(ActionEvent event) throws IOException {
+        mostrarLogin();
+    }
     public void showErrorDialog(String message) throws MalformedURLException {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error creando usuario");

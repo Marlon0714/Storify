@@ -53,6 +53,9 @@ public class gui2Controller {
     @FXML // fx:id="btnArtista"
     private Button btnArtista; // Value injected by FXMLLoader
 
+    @FXML
+    private Button btnCargar;
+
     @FXML // fx:id="btnBuscar"
     private Button btnBuscar; // Value injected by FXMLLoader
 
@@ -102,6 +105,9 @@ public class gui2Controller {
 
     @FXML
     private Label imageLabel;
+
+    @FXML
+    private TextField txtRutaArchivo;
 
     @FXML // fx:id="columnAlbum"
     private TableColumn<Cancion, String> columnAlbum; // Value injected by FXMLLoader
@@ -335,6 +341,12 @@ public class gui2Controller {
                 }
             });
         }
+    }
+
+    @FXML
+    void actionCargar(ActionEvent event){
+        modelFactoryController.cargarArtistasYCancionesDesdeArchivo(txtRutaArchivo.getText());
+        loadTable();
     }
 
     @FXML
